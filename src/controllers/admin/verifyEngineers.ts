@@ -6,6 +6,7 @@ import {
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/userSchema';
+import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 
 const verifyEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
@@ -42,9 +43,28 @@ const verifyEngineers: sync_middleware_type = async_error_handler(
           isVerifiedByCEE: true,
         },
       });
+      sendMailViaThread({
+        text: `Dear ${user.name} you have been successfully verified as a ${user.designation}`,
+        subject: 'Construction Cell',
+        from_info: `${process.env.EMAIL}`,
+        html: `Dear ${user.name} you have been successfully verified as a ${user.designation}`,
+        toSendMail: user!.email,
+        cc: null,
+        attachment: null,
+      });
     } else {
       await UserModel.findByIdAndDelete(userToBeVerified);
+      sendMailViaThread({
+        text: `Dear ${user.name} you have been rejected as a ${user.designation}`,
+        subject: 'Construction Cell',
+        from_info: `${process.env.EMAIL}`,
+        html: `Dear ${user.name} you have been rejected as a ${user.designation}`,
+        toSendMail: user!.email,
+        cc: null,
+        attachment: null,
+      });
     }
+
     const response = new Custom_response(
       true,
       null,

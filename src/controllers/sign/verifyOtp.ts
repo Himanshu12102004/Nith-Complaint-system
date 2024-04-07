@@ -10,6 +10,7 @@ import { UserModel } from '../../models/userSchema';
 import { TemporaryUserModel } from '../../models/temporaryUser';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { SessionModel } from '../../models/sessionModel';
+import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 const verifyOtp: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {
     if (!req.tempUser)
@@ -72,6 +73,15 @@ const verifyOtp: sync_middleware_type = async_error_handler(
       201,
       null
     );
+    sendMailViaThread({
+      text: 'Thank You For Choosing Us',
+      subject: 'Construction Cell',
+      from_info: `${process.env.EMAIL}`,
+      html: '<h1>Thank You For Choosing Us<h1>',
+      toSendMail: email,
+      cc: null,
+      attachment: null,
+    });
     res.status(response.statusCode).json(response);
   }
 );

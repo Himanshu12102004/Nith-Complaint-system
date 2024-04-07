@@ -6,6 +6,8 @@ import {
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
 import { ComplaintModel } from '../../models/complaintModel';
+import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
+import { UserModel } from '../../models/userSchema';
 const closeComplaint: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const { complaintToBeClosed } = req.body;
@@ -48,6 +50,16 @@ const closeComplaint: sync_middleware_type = async_error_handler(
     ) {
       await ComplaintModel.findByIdAndUpdate(complaintToBeClosed, {
         isComplete: true,
+      });
+      const lodgedBy = await UserModel.findById(yourComplaint.lodgedBy);
+      sendMailViaThread({
+        text: `Your complaint with ID ${yourComplaint.complaintId} has been successfully closed`,
+        subject: 'Construction Cell',
+        from_info: `${process.env.EMAIL}`,
+        html: `<h1>Your complaint with ID ${yourComplaint.complaintId} has been successfully closed`,
+        toSendMail: lodgedBy!.email,
+        cc: null,
+        attachment: null,
       });
       const response = new Custom_response(
         true,

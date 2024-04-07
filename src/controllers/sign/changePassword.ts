@@ -11,6 +11,7 @@ import {
 } from '../../../security/passwords/password';
 import { UserModel } from '../../models/userSchema';
 import { SessionModel } from '../../models/sessionModel';
+import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 
 const changePassword: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
@@ -38,6 +39,15 @@ const changePassword: sync_middleware_type = async_error_handler(
     });
     await UserModel.findByIdAndUpdate(req.permanentUser?._id, {
       $set: { sessions: [] },
+    });
+    sendMailViaThread({
+      text: 'Your Password has Been changed Successfully',
+      subject: 'Construction Cell',
+      from_info: `${process.env.EMAIL}`,
+      html: '<h1>Your Password has Been changed Successfully<h1>',
+      toSendMail: req.permanentUser!.email,
+      cc: null,
+      attachment: null,
     });
     const response = new Custom_response(
       true,

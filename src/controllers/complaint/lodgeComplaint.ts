@@ -8,6 +8,8 @@ import { Designations, requestWithPermanentUser } from '../../types/types';
 import { ComplaintModel } from '../../models/complaintModel';
 import { UserModel } from '../../models/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
+import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
+import { io } from '../../socket';
 const lodgeComplaint: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     console.log(req.permanentUser);
@@ -52,6 +54,21 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
     await UserModel.findByIdAndUpdate(req.permanentUser?._id, {
       $push: { complaints: complaint._id },
     });
+    sendMailViaThread({
+      text: `Your complaint with ID ${complaint.complaintId} has been successfully closed`,
+      subject: 'Construction Cell',
+      from_info: `${process.env.EMAIL}`,
+      html: `<h1>Your complaint with ID ${complaint.complaintId} has been successfully closed`,
+      toSendMail: req.permanentUser?.email!,
+      cc: null,
+      attachment: null,
+    });
+    if (global.connectedUsers.get(chiefExecutiveEngineerID) != undefined) {
+      io.to(global.connectedUsers.get(chiefExecutiveEngineerID)!).emit(
+        'newComplaint',
+        'getAssignedComplaints'
+      );
+    }
     const response = new Custom_response(
       true,
       null,

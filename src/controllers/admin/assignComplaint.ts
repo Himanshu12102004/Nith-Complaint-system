@@ -8,6 +8,8 @@ import { Designations, requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/userSchema';
 import { ComplaintModel } from '../../models/complaintModel';
 import mongoose from 'mongoose';
+import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
+import { io } from '../../socket';
 const assignComplaints: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const assignTo = req.body.assignTo;
@@ -68,6 +70,21 @@ const assignComplaints: sync_middleware_type = async_error_handler(
         },
       },
     });
+    sendMailViaThread({
+      text: `Dear ${engineerToBeAssignedTo.name} you have been assigned with a new complaint with id ${complaint.complaintId}`,
+      subject: 'Construction Cell',
+      from_info: `${process.env.EMAIL}`,
+      html: `Dear ${engineerToBeAssignedTo.name} you have been assigned with a new complaint with id ${complaint.complaintId}`,
+      toSendMail: engineerToBeAssignedTo.email,
+      cc: null,
+      attachment: null,
+    });
+    if (global.connectedUsers.get(assignTo) != undefined) {
+      io.to(global.connectedUsers.get(assignTo)!).emit(
+        'newComplaint',
+        'getAssignedComplaints'
+      );
+    }
     const response = new Custom_response(
       true,
       null,
