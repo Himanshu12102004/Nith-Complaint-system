@@ -11,6 +11,8 @@ import { TemporaryUserModel } from '../../models/temporaryUser';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { SessionModel } from '../../models/sessionModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
+import { encrypt } from '../../../security/secrets/encrypt';
+import { io } from '../../socket';
 const verifyOtp: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {
     if (!req.tempUser)
@@ -73,6 +75,19 @@ const verifyOtp: sync_middleware_type = async_error_handler(
       201,
       null
     );
+    if (
+      designation == Designations.ASSISTANT_ENGINEER ||
+      designation == Designations.JUNIOR_ENGINEER
+    ) {
+      const ceeId = await UserModel.findOne({
+        designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
+      });
+      if (global.connectedUsers.get(ceeId!._id.toString()))
+        io.to(global.connectedUsers.get(ceeId!._id.toString())!).emit(
+          'newEngineer',
+          'getUnverifiedEngineers'
+        );
+    }
     sendMailViaThread({
       text: 'Thank You For Choosing Us',
       subject: 'Construction Cell',

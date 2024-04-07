@@ -55,19 +55,22 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
       $push: { complaints: complaint._id },
     });
     sendMailViaThread({
-      text: `Your complaint with ID ${complaint.complaintId} has been successfully closed`,
+      text: `Your complaint with ID ${complaint.complaintId} has been successfully opened`,
       subject: 'Construction Cell',
       from_info: `${process.env.EMAIL}`,
-      html: `<h1>Your complaint with ID ${complaint.complaintId} has been successfully closed`,
+      html: `<h1>Your complaint with ID ${complaint.complaintId} has been successfully opened`,
       toSendMail: req.permanentUser?.email!,
       cc: null,
       attachment: null,
     });
-    if (global.connectedUsers.get(chiefExecutiveEngineerID) != undefined) {
-      io.to(global.connectedUsers.get(chiefExecutiveEngineerID)!).emit(
-        'newComplaint',
-        'getAssignedComplaints'
-      );
+    if (
+      global.connectedUsers.get(
+        JSON.stringify(chiefExecutiveEngineerID).toString()
+      ) != undefined
+    ) {
+      io.to(
+        global.connectedUsers.get(chiefExecutiveEngineerID.toString())!
+      ).emit('newComplaint', 'getAssignedComplaints');
     }
     const response = new Custom_response(
       true,
