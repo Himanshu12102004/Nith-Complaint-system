@@ -9,7 +9,9 @@ const router = express.Router();
 router
   .route('/lodgeComplaint')
   .post(getUserFromPermanent, validateComplaintType, lodgeComplaint);
-router.route('/getMyComplaints').get(getUserFromPermanent, getYourComplaints);
+router
+  .route('/getMyComplaints')
+  .post(getUserFromPermanent, parseFilters, getYourComplaints);
 router
   .route('/getAssignedComplaints')
   .post(getUserFromPermanent, parseFilters, getAssignedComplaints);

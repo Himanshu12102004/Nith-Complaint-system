@@ -11,7 +11,9 @@ const parseFilters = async (
     const filters = req.body.filters;
     const query: any = {};
     const moreFilters: any = {};
-    moreFilters.pages = { pageNo: 1, pageSize: 10 };
+    moreFilters.pages = { pageSize: 20, pageNo: 1 };
+    req.moreFilters = moreFilters;
+    console.log(moreFilters);
     if (!filters) {
       req.parsedFilters = query;
       next();
@@ -57,9 +59,16 @@ const parseFilters = async (
     if (filters.hostel) moreFilters.hostel = filters.hostel;
     if (filters.pages) {
       if (filters.pages.pageNo) moreFilters.pages.pageNo = filters.pages.pageNo;
-      if (filters.pages.pageSize) moreFilters.pageSize = filters.pages.pageSize;
+      else moreFilters.pages.pageNo = 1;
+      if (filters.pages.pageSize)
+        moreFilters.pages.pageSize = filters.pages.pageSize;
+      else moreFilters.pages.pageSize = 20;
+    } else {
+      moreFilters.pages = { pageSize: 20, pageNo: 1 };
+      console.log(moreFilters);
     }
     req.moreFilters = moreFilters;
+
     req.parsedFilters = query;
     next();
   } catch (error) {

@@ -45,11 +45,40 @@ const getAssignedComplaints: sync_middleware_type = async_error_handler(
           password: false,
         })
       )?.toJSON();
-      if (req.moreFilters) {
-        if (req.moreFilters!.hostel) {
-          if (lodgedBy?.hostel != req.moreFilters.hostel) return;
-        }
+
+      if (
+        req.moreFilters &&
+        req.moreFilters.hostel &&
+        lodgedBy?.hostel !== req.moreFilters.hostel
+      ) {
+        return;
       }
+
+      const currentlyAssignedTo = await UserModel.findById(
+        elem.currentlyAssignedTo,
+        {
+          complaints: false,
+          sessions: false,
+          assignedComplaints: false,
+          password: false,
+        }
+      );
+
+      const historyOfComplaint = await Promise.all(
+        elem.historyOfComplaint.map(async (historyItem: any) => {
+          const assignedTo = await UserModel.findById(historyItem.assignedTo, {
+            complaints: false,
+            sessions: false,
+            assignedComplaints: false,
+            password: false,
+          });
+          return {
+            assignedTo: assignedTo?.toJSON(),
+            assignedOn: historyItem.assignedOn,
+          };
+        })
+      );
+
       return {
         _id: elem._id,
         location: elem.location,
@@ -57,27 +86,30 @@ const getAssignedComplaints: sync_middleware_type = async_error_handler(
         subNatureOfComplaint: elem.subNatureOfComplaint,
         description: elem.description,
         lodgedBy,
-        currentlyAssignedTo: (
-          await UserModel.findById(elem.currentlyAssignedTo, {
-            complaints: false,
-            sessions: false,
-            assignedComplaints: false,
-            password: false,
-          })
-        )?.toJSON(),
+        currentlyAssignedTo: currentlyAssignedTo?.toJSON(),
         tentativeDateOfCompletion: elem.tentativeDateOfCompletion,
         lodgedOn: elem.lodgedOn,
         complaintId: elem.complaintId,
         isComplete: elem.isComplete,
-        historyOfComplaint: elem.historyOfComplaint,
+        historyOfComplaint,
       };
     });
 
-    const finalComplaints = await Promise.all(complaintsPromiseArray!);
+    let complaintsProcessed = await Promise.all(complaintsPromiseArray!);
+    let finalComplaints = complaintsProcessed.filter((elem) => {
+      if (elem) return true;
+    });
+    const { pageNo, pageSize } = req.moreFilters.pages;
+    const totalComplatints = finalComplaints?.length;
+    const totalPages = Math.ceil(totalComplatints! / pageSize);
+    let complaintsToBeShown = complaintsProcessed?.slice(
+      (pageNo - 1) * pageSize,
+      (pageNo - 1) * pageSize + pageSize
+    );
     const response = new Custom_response(
       true,
       null,
-      { assignedComplaints: finalComplaints },
+      { assignedComplaints: complaintsToBeShown, totalPages, totalComplatints },
       'success',
       200,
       null

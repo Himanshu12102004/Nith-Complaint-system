@@ -1,8 +1,10 @@
 import express from 'express';
 import { getUserFromPermanent } from '../middleware/getUserFromPermanent';
 import { setTentativeDateOfCompletion } from '../controllers/complaintControls/setTentativeDateOfCompletion';
+import { closeComplaint } from '../controllers/complaintControls/closeComplaint';
 const router = express.Router();
 router
   .route('/setTentativeDate')
-  .post(getUserFromPermanent, setTentativeDateOfCompletion);
+  .patch(getUserFromPermanent, setTentativeDateOfCompletion);
+router.route('/closeComplaint').patch(getUserFromPermanent, closeComplaint);
 export { router as complaintControllerRouter };

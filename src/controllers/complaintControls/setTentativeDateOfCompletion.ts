@@ -14,7 +14,7 @@ const setTentativeDateOfCompletion: sync_middleware_type = async_error_handler(
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    const { complaintId, tentativeDateOfCompletion } = req.body.complaintId;
+    const { complaintId, tentativeDateOfCompletion } = req.body;
     if (!complaintId)
       throw new Custom_error({
         errors: [{ message: 'sendAComplaintId' }],
@@ -26,7 +26,21 @@ const setTentativeDateOfCompletion: sync_middleware_type = async_error_handler(
         errors: [{ message: 'noSuchComplaint' }],
         statusCode: 400,
       });
-    if (tentativeDateOfCompletion < new Date(Date.now()))
+    if (
+      JSON.stringify(complaint.currentlyAssignedTo) !=
+      JSON.stringify(req.permanentUser?._id)
+    ) {
+      throw new Custom_error({
+        errors: [{ message: 'notAuthorized' }],
+        statusCode: 401,
+      });
+    }
+    if (new Date(complaint.tentativeDateOfCompletion) != new Date(0))
+      throw new Custom_error({
+        errors: [{ message: 'cannotChangeTheTentativeDateAgain' }],
+        statusCode: 400,
+      });
+    if (new Date(tentativeDateOfCompletion) < new Date(Date.now()))
       throw new Custom_error({
         errors: [{ message: 'invaliDDateOfTentaiveCompletion' }],
         statusCode: 400,
@@ -37,7 +51,7 @@ const setTentativeDateOfCompletion: sync_middleware_type = async_error_handler(
     const response = new Custom_response(
       true,
       null,
-      'tentatieDateOfCompltionDone',
+      'successfullySetTentativeDateOfCompletion',
       'success',
       200,
       null

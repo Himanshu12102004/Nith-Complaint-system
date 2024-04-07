@@ -7,6 +7,7 @@ import {
 import { Designations, requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/userSchema';
 import { ComplaintModel } from '../../models/complaintModel';
+import mongoose from 'mongoose';
 const assignComplaints: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const assignTo = req.body.assignTo;
