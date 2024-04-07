@@ -37,21 +37,32 @@ const getAssignedComplaints: sync_middleware_type = async_error_handler(
       .exec();
     const complaints = userWithAssignedComplaints?.assignedComplaints;
     const complaintsPromiseArray = complaints?.map(async (elem: any) => {
+      const lodgedBy = (
+        await UserModel.findById(elem.lodgedBy, {
+          complaints: false,
+          sessions: false,
+          assignedComplaints: false,
+          password: false,
+        })
+      )?.toJSON();
+      if (req.moreFilters) {
+        if (req.moreFilters!.hostel) {
+          if (lodgedBy?.hostel != req.moreFilters.hostel) return;
+        }
+      }
       return {
+        _id: elem._id,
         location: elem.location,
         natureOfComplaint: elem.natureOfComplaint,
         subNatureOfComplaint: elem.subNatureOfComplaint,
         description: elem.description,
-        lodgedBy: (
-          await UserModel.findById(elem.lodgedBy, {
-            complaints: false,
-            assignedComplaints: false,
-          })
-        )?.toJSON(),
+        lodgedBy,
         currentlyAssignedTo: (
           await UserModel.findById(elem.currentlyAssignedTo, {
             complaints: false,
+            sessions: false,
             assignedComplaints: false,
+            password: false,
           })
         )?.toJSON(),
         tentativeDateOfCompletion: elem.tentativeDateOfCompletion,
@@ -63,7 +74,6 @@ const getAssignedComplaints: sync_middleware_type = async_error_handler(
     });
 
     const finalComplaints = await Promise.all(complaintsPromiseArray!);
-    console.log(finalComplaints);
     const response = new Custom_response(
       true,
       null,

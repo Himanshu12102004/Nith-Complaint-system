@@ -66,6 +66,12 @@ const getNewAccessToken: sync_middleware_type = async_error_handler(
       deviceFingerprint: req.deviceFingerprint!,
     });
     await thisSession.save();
+    await UserModel.findOneAndUpdate(
+      { _id: decodedJWT._id },
+      { $set: { 'sessions.$[elem]': refreshToken } },
+      { arrayFilters: [{ elem: jwt.split(' ')[1] }], new: true }
+    );
+
     const response = new Custom_response(
       true,
       null,

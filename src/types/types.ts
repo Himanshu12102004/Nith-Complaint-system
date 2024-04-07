@@ -28,6 +28,7 @@ export interface requestWithPermanentUser extends Request {
 export interface requestWithPermanentUserAndParsedFilters extends Request {
   permanentUser?: permanentUserDoc;
   parsedFilters?: Object;
+  moreFilters?: any;
 }
 export enum NatureOfComplaint {
   MASONRY = 'Masonry',

@@ -10,6 +10,7 @@ import {
   hashPassword,
 } from '../../../security/passwords/password';
 import { UserModel } from '../../models/userSchema';
+import { SessionModel } from '../../models/sessionModel';
 
 const changePassword: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
@@ -31,6 +32,12 @@ const changePassword: sync_middleware_type = async_error_handler(
       });
     await UserModel.findByIdAndUpdate(req.permanentUser?._id, {
       $set: { password: await hashPassword(newPassword) },
+    });
+    req.permanentUser?.sessions.forEach(async (elem: string) => {
+      await SessionModel.findOneAndDelete({ refreshToken: elem });
+    });
+    await UserModel.findByIdAndUpdate(req.permanentUser?._id, {
+      $set: { sessions: [] },
     });
     const response = new Custom_response(
       true,

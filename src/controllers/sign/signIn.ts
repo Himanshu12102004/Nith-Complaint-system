@@ -46,6 +46,9 @@ const signIn: sync_middleware_type = async_error_handler(
       deviceFingerprint: req.deviceFingerprint!,
     });
     await thisSession.save();
+    await UserModel.findByIdAndUpdate(user._id, {
+      $push: { sessions: refreshToken },
+    });
     const response = new Custom_response(
       true,
       null,

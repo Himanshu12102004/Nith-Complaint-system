@@ -16,11 +16,20 @@ import { Worker } from 'worker_threads';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { hashPassword } from '../../../security/passwords/password';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
+import { UserModel } from '../../models/userSchema';
+import { encrypt } from '../../../security/secrets/encrypt';
 export const signUp: sync_middleware_type = async_error_handler(
   async (req: requestWithDeviceFingerprint, res, next) => {
     const { name, phone, email, designation, hostel, department, password } =
       req.body;
-
+    const cee = await UserModel.findOne({
+      designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
+    });
+    if (cee && designation == Designations.CHIEF_EXECUTIVE_ENGINEER)
+      throw new Custom_error({
+        errors: [{ message: 'ceeAlreadyExits' }],
+        statusCode: 401,
+      });
     const otp = await getOtp();
     const user = TemporaryUserModel.build({
       name,
@@ -57,7 +66,7 @@ export const signUp: sync_middleware_type = async_error_handler(
     const response = new Custom_response(
       true,
       null,
-      { user: thisUser, token: jwtForOtp },
+      { token: jwtForOtp },
       'success',
       201,
       null

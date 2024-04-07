@@ -10,12 +10,20 @@ const parseFilters = async (
   try {
     const filters = req.body.filters;
     const query: any = {};
+    const moreFilters: any = {};
+    moreFilters.pages = { pageNo: 1, pageSize: 10 };
     if (!filters) {
       req.parsedFilters = query;
       next();
       return;
     }
-    console.log('dfjdhfhdj');
+    if (filters.complaintId) {
+      console.log(filters);
+      query.complaintId = filters.complaintId;
+      req.parsedFilters = query;
+      next();
+      return;
+    }
     if (filters.lodgedBy) {
       query.lodgedBy = new mongoose.Types.ObjectId(filters.lodgedBy as string);
     }
@@ -43,13 +51,15 @@ const parseFilters = async (
       query.lodgedOn = { $lte: filters.lodgedOnEnd };
     }
 
-    if (filters.complaintId) {
-      query.complaintId = filters.complaintId;
-    }
-
     if (filters.isComplete !== undefined) {
       query.isComplete = filters.isComplete;
     }
+    if (filters.hostel) moreFilters.hostel = filters.hostel;
+    if (filters.pages) {
+      if (filters.pages.pageNo) moreFilters.pages.pageNo = filters.pages.pageNo;
+      if (filters.pages.pageSize) moreFilters.pageSize = filters.pages.pageSize;
+    }
+    req.moreFilters = moreFilters;
     req.parsedFilters = query;
     next();
   } catch (error) {

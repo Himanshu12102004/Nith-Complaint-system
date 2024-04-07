@@ -10,6 +10,15 @@ import { UserModel } from '../../models/userSchema';
 const verifyEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const userToBeVerified = req.body.userToBeVerified;
+    const verify = req.body.verify;
+    if (
+      req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER
+    ) {
+      throw new Custom_error({
+        errors: [{ message: 'notAuthorized' }],
+        statusCode: 401,
+      });
+    }
     if (!userToBeVerified)
       throw new Custom_error({
         errors: [{ message: 'noUserToBeVerified' }],
@@ -27,11 +36,15 @@ const verifyEngineers: sync_middleware_type = async_error_handler(
         errors: [{ message: 'verificationNotRequired' }],
         statusCode: 400,
       });
-    await UserModel.findByIdAndUpdate(userToBeVerified, {
-      set: {
-        isVerifiedByCEE: true,
-      },
-    });
+    if (verify) {
+      await UserModel.findByIdAndUpdate(userToBeVerified, {
+        $set: {
+          isVerifiedByCEE: true,
+        },
+      });
+    } else {
+      await UserModel.findByIdAndDelete(userToBeVerified);
+    }
     const response = new Custom_response(
       true,
       null,
