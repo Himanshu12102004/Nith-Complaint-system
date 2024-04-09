@@ -77,7 +77,7 @@ const getNewAccessToken: sync_middleware_type = async_error_handler(
       null,
       { accessToken, refreshToken },
       'success',
-      201,
+      200,
       null
     );
     res.status(response.statusCode).json(response);

@@ -30,7 +30,8 @@ const verifyEngineers: sync_middleware_type = async_error_handler(
     if (
       !(
         user?.designation == Designations.ASSISTANT_ENGINEER ||
-        user?.designation == Designations.JUNIOR_ENGINEER
+        user?.designation == Designations.JUNIOR_ENGINEER ||
+        user?.designation == Designations.SUPERVISOR
       )
     )
       throw new Custom_error({

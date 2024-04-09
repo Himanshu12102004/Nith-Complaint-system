@@ -20,6 +20,7 @@ interface UserDoc extends mongoose.Document {
   password: string;
   designation: string;
   hostel: string;
+  dateCreated: Date;
   department: string;
   complaints: Schema.Types.ObjectId[];
   assignedComplaints: Schema.Types.ObjectId[];
@@ -44,6 +45,7 @@ const userSchema = new mongoose.Schema<UserDoc>(
     phone: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     designation: { type: String, required: true },
+    dateCreated: { type: Date, default: Date.now },
     hostel: { type: String, default: 'null' },
     department: { type: String, default: 'null' },
     password: { type: String, required: true },

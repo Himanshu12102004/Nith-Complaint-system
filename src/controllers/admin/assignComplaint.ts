@@ -44,7 +44,9 @@ const assignComplaints: sync_middleware_type = async_error_handler(
     }
     if (
       req.permanentUser?.designation == Designations.CHIEF_EXECUTIVE_ENGINEER &&
-      engineerToBeAssignedTo?.designation != Designations.ASSISTANT_ENGINEER
+      (engineerToBeAssignedTo?.designation == Designations.WARDEN ||
+        engineerToBeAssignedTo?.designation == req.permanentUser?.designation ||
+        engineerToBeAssignedTo?.designation == Designations.FACULTY)
     )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
@@ -52,7 +54,24 @@ const assignComplaints: sync_middleware_type = async_error_handler(
       });
     if (
       req.permanentUser?.designation == Designations.ASSISTANT_ENGINEER &&
-      engineerToBeAssignedTo?.designation != Designations.JUNIOR_ENGINEER
+      (engineerToBeAssignedTo?.designation == Designations.WARDEN ||
+        engineerToBeAssignedTo?.designation == req.permanentUser?.designation ||
+        engineerToBeAssignedTo?.designation == Designations.FACULTY ||
+        engineerToBeAssignedTo?.designation ==
+          Designations.CHIEF_EXECUTIVE_ENGINEER)
+    )
+      throw new Custom_error({
+        errors: [{ message: 'notAuthorized' }],
+        statusCode: 401,
+      });
+    if (
+      req.permanentUser?.designation == Designations.JUNIOR_ENGINEER &&
+      (engineerToBeAssignedTo?.designation == Designations.WARDEN ||
+        engineerToBeAssignedTo?.designation == Designations.FACULTY ||
+        engineerToBeAssignedTo?.designation ==
+          Designations.CHIEF_EXECUTIVE_ENGINEER ||
+        engineerToBeAssignedTo?.designation == req.permanentUser?.designation ||
+        engineerToBeAssignedTo?.designation == Designations.ASSISTANT_ENGINEER)
     )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],

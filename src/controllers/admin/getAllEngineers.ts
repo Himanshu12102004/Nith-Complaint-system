@@ -7,16 +7,17 @@ import {
 import { Designations, requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
-const getUnverifiedEngineers: sync_middleware_type = async_error_handler(
+
+const getAllEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
-    if (req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER)
+    const permanentUser = req.permanentUser;
+    if (permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER)
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    const unverifiedEngineers = await UserModel.find(
+    const allEngineers = await UserModel.find(
       {
-        isVerifiedByCEE: false,
         $or: [
           { designation: encrypt(Designations.ASSISTANT_ENGINEER) },
           { designation: encrypt(Designations.JUNIOR_ENGINEER) },
@@ -28,7 +29,7 @@ const getUnverifiedEngineers: sync_middleware_type = async_error_handler(
     const response = new Custom_response(
       true,
       null,
-      { unverifiedEngineers },
+      { allEngineers },
       'success',
       200,
       null
@@ -36,4 +37,4 @@ const getUnverifiedEngineers: sync_middleware_type = async_error_handler(
     res.status(response.statusCode).json(response);
   }
 );
-export { getUnverifiedEngineers };
+export { getAllEngineers };

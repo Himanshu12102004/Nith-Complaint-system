@@ -16,6 +16,7 @@ const getCurrentUser: sync_middleware_type = async_error_handler(
       hostel: user?.hostel,
       department: user?.department,
       isVerifiedByCEE: user?.isVerifiedByCEE,
+      _id: user?._id,
     };
     const response = new Custom_response(
       true,

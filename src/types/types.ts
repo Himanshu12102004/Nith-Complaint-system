@@ -7,6 +7,7 @@ export enum Designations {
   CHIEF_EXECUTIVE_ENGINEER = 'Chief Executive Engineer',
   ASSISTANT_ENGINEER = 'Assistant Engineer',
   JUNIOR_ENGINEER = 'Junior Engineer',
+  SUPERVISOR = 'Supervisor',
 }
 
 export enum RequestedFor {

@@ -43,7 +43,8 @@ const signUpValidation: sync_middleware_type = async_error_handler(
         designation == Designations.JUNIOR_ENGINEER ||
         designation == Designations.ASSISTANT_ENGINEER ||
         designation == Designations.FACULTY ||
-        designation == Designations.CHIEF_EXECUTIVE_ENGINEER
+        designation == Designations.CHIEF_EXECUTIVE_ENGINEER ||
+        designation == Designations.SUPERVISOR
       )
     ) {
       throw new Custom_error({

@@ -3,8 +3,17 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import { Custom_error } from '@himanshu_guptaorg/utils';
 import { startSocket } from './socket';
+import fs from 'fs';
+import path from 'path';
 dotenv.config({ path: '.env' });
 dotenv.config({ path: 'config.env' });
+
+declare global {
+  var emails: {};
+}
+global.emails = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../email/email.json'), 'utf8')
+);
 const init = async () => {
   try {
     if (!process.env.MONGO_URI)
