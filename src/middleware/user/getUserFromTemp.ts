@@ -3,9 +3,9 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { jwtVerification } from '../../security/jwt/decodeJwt';
-import { TemporaryUserModel, UserDoc } from '../models/temporaryUser';
-import { RequestedFor, requestWithTempUser } from '../types/types';
+import { jwtVerification } from '../../../security/jwt/decodeJwt';
+import { TemporaryUserModel, UserDoc } from '../../models/temporaryUser';
+import { requestWithTempUser } from '../../types/types';
 const getUserFromTemp: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {
     const jwt: string = req.headers.authentication as string;
@@ -19,10 +19,17 @@ const getUserFromTemp: sync_middleware_type = async_error_handler(
         errors: [{ message: 'invalidJwt' }],
         statusCode: 400,
       });
-    const decodedJWT = await jwtVerification(
-      jwt.split(' ')[1],
-      process.env.OTP_JWT_SECRET!
-    );
+    let decodedJWT;
+    if (req.query.type == 'forgotPassword')
+      decodedJWT = await jwtVerification(
+        jwt.split(' ')[1],
+        process.env.FORGOT_PASSWORD_SECRET!
+      );
+    else
+      decodedJWT = await jwtVerification(
+        jwt.split(' ')[1],
+        process.env.OTP_JWT_SECRET!
+      );
     const user = await TemporaryUserModel.findById(decodedJWT._id).select(
       '+password +deviceFingerprint'
     );
@@ -38,6 +45,7 @@ const getUserFromTemp: sync_middleware_type = async_error_handler(
         statusCode: 401,
       });
     req.tempUser = user.toJSON();
+    console.log(req.tempUser);
     next();
   }
 );

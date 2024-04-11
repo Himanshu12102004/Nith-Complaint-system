@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { UserDoc } from '../models/temporaryUser';
 import { permanentUserDoc } from '../models/userSchema';
+import { ComplaintDoc } from '../models/complaintModel';
 export enum Designations {
   FACULTY = 'Faculty',
   WARDEN = 'Warden',
@@ -19,17 +20,32 @@ export enum RequestedFor {
 export interface requestWithDeviceFingerprint extends Request {
   deviceFingerprint?: string;
 }
-export interface requestWithTempUser extends Request {
+export interface requestWithTempUser extends requestWithDeviceFingerprint {
   tempUser?: UserDoc;
-  deviceFingerprint?: string;
 }
 export interface requestWithPermanentUser extends Request {
   permanentUser?: permanentUserDoc;
 }
-export interface requestWithPermanentUserAndParsedFilters extends Request {
-  permanentUser?: permanentUserDoc;
+export interface requestWithPermanentUserAndDeviceFingerPrint
+  extends requestWithPermanentUser {
+  deviceFingerprint?: string;
+}
+export interface requestWithPermanentUserAndParsedFilters
+  extends requestWithPermanentUser {
   parsedFilters?: Object;
   moreFilters?: any;
+}
+export interface requestWithQueryAndPermanentUser
+  extends requestWithPermanentUser {
+  dbQuery?: any;
+}
+export interface requestWithEngineer extends requestWithPermanentUser {
+  engineer?: permanentUserDoc;
+}
+export interface requestWithComplaintAndEngineer
+  extends requestWithPermanentUser {
+  complaint?: ComplaintDoc;
+  engineer?: permanentUserDoc;
 }
 export enum NatureOfComplaint {
   MASONRY = 'Masonry',

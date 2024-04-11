@@ -53,6 +53,7 @@ const temporaryUserSchema = new mongoose.Schema<UserDoc>(
     password: { type: String, required: true, select: false },
     complaints: [{ type: Schema.Types.ObjectId, ref: 'Complaint' }],
     deviceFingerprint: { type: String, select: false },
+
     otp: { type: String },
     requestedFor: { type: String },
     createdAt: { type: Date, default: Date.now, required: true },

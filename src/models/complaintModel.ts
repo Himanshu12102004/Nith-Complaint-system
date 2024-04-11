@@ -16,7 +16,7 @@ export interface ComplaintAttributes {
   ];
 }
 
-interface ComplaintDoc extends mongoose.Document {
+export interface ComplaintDoc extends mongoose.Document {
   lodgedBy: mongoose.Types.ObjectId;
   location: string;
   natureOfComplaint: string;

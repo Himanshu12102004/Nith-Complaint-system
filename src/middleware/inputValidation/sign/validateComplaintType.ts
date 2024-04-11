@@ -5,7 +5,7 @@ import {
   SubNatureOfElectricalComplaint,
   SubNatureOfMasonryComplaint,
   SubNatureOfPlumbingComplaint,
-} from '../types/types';
+} from '../../../types/types';
 
 const validateComplaintType: sync_middleware_type = (req, res, next) => {
   try {

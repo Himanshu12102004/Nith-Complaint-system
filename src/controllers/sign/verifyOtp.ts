@@ -4,7 +4,11 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { Designations, requestWithTempUser } from '../../types/types';
+import {
+  Designations,
+  RequestedFor,
+  requestWithTempUser,
+} from '../../types/types';
 import { checkPasswords } from '../../../security/passwords/password';
 import { UserModel } from '../../models/userSchema';
 import { TemporaryUserModel } from '../../models/temporaryUser';
@@ -38,6 +42,11 @@ const verifyOtp: sync_middleware_type = async_error_handler(
       });
     const { name, phone, email, designation, hostel, department, password } =
       req.tempUser;
+    if (req.tempUser.requestedFor != RequestedFor.EMAIL_VERIFICATION)
+      throw new Custom_error({
+        errors: [{ message: 'sorryWrongRoute' }],
+        statusCode: 401,
+      });
     const user = UserModel.build({
       name,
       phone,

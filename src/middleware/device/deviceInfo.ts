@@ -4,7 +4,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import useragent from 'express-useragent';
-import { requestWithDeviceFingerprint } from '../types/types';
+import { requestWithDeviceFingerprint } from '../../types/types';
 const getDeviceInfo: sync_middleware_type = async_error_handler(
   async (req: requestWithDeviceFingerprint, res, next) => {
     try {

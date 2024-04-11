@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { requestWithPermanentUserAndParsedFilters } from '../types/types';
+import { requestWithPermanentUserAndParsedFilters } from '../../../types/types';
 
 const parseFilters = async (
   req: requestWithPermanentUserAndParsedFilters,

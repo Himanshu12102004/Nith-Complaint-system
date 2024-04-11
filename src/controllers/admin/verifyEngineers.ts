@@ -4,13 +4,17 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { Designations, requestWithPermanentUser } from '../../types/types';
+import {
+  Designations,
+  requestWithEngineer,
+  requestWithPermanentUser,
+} from '../../types/types';
 import { UserModel } from '../../models/userSchema';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 
 const verifyEngineers: sync_middleware_type = async_error_handler(
-  async (req: requestWithPermanentUser, res, next) => {
-    const userToBeVerified = req.body.userToBeVerified;
+  async (req: requestWithEngineer, res, next) => {
+    const engineerToBeVerified = req.body.engineer;
     const verify = req.body.verify;
     if (
       req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER
@@ -20,52 +24,50 @@ const verifyEngineers: sync_middleware_type = async_error_handler(
         statusCode: 401,
       });
     }
-    if (!userToBeVerified)
-      throw new Custom_error({
-        errors: [{ message: 'noUserToBeVerified' }],
-        statusCode: 400,
-      });
 
-    const user = (await UserModel.findById(userToBeVerified))?.toJSON();
-    if (
-      !(
-        user?.designation == Designations.ASSISTANT_ENGINEER ||
-        user?.designation == Designations.JUNIOR_ENGINEER ||
-        user?.designation == Designations.SUPERVISOR
-      )
-    )
-      throw new Custom_error({
-        errors: [{ message: 'verificationNotRequired' }],
-        statusCode: 400,
-      });
-    if (verify) {
-      await UserModel.findByIdAndUpdate(userToBeVerified, {
+    if (verify == true) {
+      await UserModel.findByIdAndUpdate(engineerToBeVerified, {
         $set: {
           isVerifiedByCEE: true,
         },
       });
       sendMailViaThread({
-        text: `Dear ${user.name} you have been successfully verified as a ${user.designation}`,
+        text: `Dear ${
+          req.engineer!.name
+        } you have been successfully verified as a ${
+          req.engineer!.designation
+        }`,
         subject: 'Construction Cell',
         from_info: `${process.env.EMAIL}`,
-        html: `Dear ${user.name} you have been successfully verified as a ${user.designation}`,
-        toSendMail: user!.email,
+        html: `Dear ${
+          req.engineer!.name
+        } you have been successfully verified as a ${
+          req.engineer!.designation
+        }`,
+        toSendMail: req.engineer!.email,
         cc: null,
         attachment: null,
       });
-    } else {
-      await UserModel.findByIdAndDelete(userToBeVerified);
+    } else if (verify == false) {
+      await UserModel.findByIdAndDelete(engineerToBeVerified);
       sendMailViaThread({
-        text: `Dear ${user.name} you have been rejected as a ${user.designation}`,
+        text: `Dear ${req.engineer!.name} you have been rejected as a ${
+          req.engineer!.designation
+        }`,
         subject: 'Construction Cell',
         from_info: `${process.env.EMAIL}`,
-        html: `Dear ${user.name} you have been rejected as a ${user.designation}`,
-        toSendMail: user!.email,
+        html: `Dear ${req.engineer!.name} you have been rejected as a ${
+          req.engineer!.designation
+        }`,
+        toSendMail: req.engineer!!.email,
         cc: null,
         attachment: null,
       });
-    }
-
+    } else
+      throw new Custom_error({
+        errors: [{ message: 'invalidOptionForVarify' }],
+        statusCode: 400,
+      });
     const response = new Custom_response(
       true,
       null,

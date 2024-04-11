@@ -13,6 +13,7 @@ import { getOtp } from '../../../security/otp/otp';
 import { TemporaryUserModel } from '../../models/temporaryUser';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
+import { UserModel } from '../../models/userSchema';
 const resendOtp: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {
     const {
@@ -52,26 +53,51 @@ const resendOtp: sync_middleware_type = async_error_handler(
       otpSentTimes: otpSentTimes + 1,
     });
     await thisUser.save();
-    sendMailViaThread({
-      text: `Your OTP for the NITH complaint system is ${otp.generatedOtp}`,
-      subject: 'HORIZON Complaint System',
-      from_info: process.env.EMAIL!,
-      toSendMail: email,
-      html: `<h1>Your OTP for the NITH complaint system is ${otp.generatedOtp}</h1>`,
-      cc: null,
-      attachment: null,
-    });
     let jwtForOtp;
-    if (requestedFor == RequestedFor.EMAIL_VERIFICATION)
+    if (requestedFor == RequestedFor.EMAIL_VERIFICATION) {
       jwtForOtp = await createJwt(
         { _id: thisUser!._id },
         process.env.OTP_JWT_SECRET!,
         { expiresIn: process.env.TIME_TO_LIVE_JWT }
       );
+      sendMailViaThread({
+        text: `Your OTP for the NITH complaint system is ${otp.generatedOtp}`,
+        subject: 'HORIZON Complaint System',
+        from_info: process.env.EMAIL!,
+        toSendMail: email,
+        html: `<h1>Your OTP for the NITH complaint system is ${otp.generatedOtp}</h1>`,
+        cc: null,
+        attachment: null,
+      });
+    }
+    if (requestedFor == RequestedFor.FORGOT_PASSWORD) {
+      const permanentUser = await UserModel.find_one({ email });
+      if (!permanentUser)
+        throw new Custom_error({
+          errors: [{ message: 'noSuchUser' }],
+          statusCode: 404,
+        });
+      jwtForOtp = await createJwt(
+        { _id: thisUser!._id, permanentUser_id: permanentUser._id },
+        process.env.FORGOT_PASSWORD_SECRET!,
+        {
+          expiresIn: process.env.TIME_TO_LIVE_JWT,
+        }
+      );
+      sendMailViaThread({
+        text: `Your OTP for the NITH complaint system password change ${otp.generatedOtp}`,
+        subject: 'HORIZON Complaint System',
+        from_info: process.env.EMAIL!,
+        toSendMail: email,
+        html: `<h1>Your OTP for the NITH complaint system password change ${otp.generatedOtp}</h1>`,
+        cc: null,
+        attachment: null,
+      });
+    }
     const response = new Custom_response(
       true,
       null,
-      { user: thisUser, token: jwtForOtp },
+      { token: jwtForOtp },
       'success',
       201,
       null

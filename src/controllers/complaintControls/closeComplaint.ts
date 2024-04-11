@@ -4,35 +4,53 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { Designations, requestWithPermanentUser } from '../../types/types';
+import {
+  Designations,
+  requestWithComplaintAndEngineer,
+} from '../../types/types';
 import { ComplaintModel } from '../../models/complaintModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { UserModel } from '../../models/userSchema';
 const closeComplaint: sync_middleware_type = async_error_handler(
-  async (req: requestWithPermanentUser, res, next) => {
-    const { complaintToBeClosed } = req.body;
+  async (req: requestWithComplaintAndEngineer, res, next) => {
+    const { complaint } = req.body;
     const permanentUser = req.permanentUser;
+    if (req.complaint!.isComplete) {
+      throw new Custom_error({
+        errors: [{ message: 'complaintAlreadyCloses' }],
+        statusCode: 400,
+      });
+    }
     if (
-      permanentUser?.designation == Designations.ASSISTANT_ENGINEER ||
-      permanentUser?.designation == Designations.CHIEF_EXECUTIVE_ENGINEER
+      permanentUser?.designation != Designations.JUNIOR_ENGINEER &&
+      JSON.stringify(req.complaint?.lodgedBy) !=
+        JSON.stringify(permanentUser!._id)
     )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    const yourComplaint = await ComplaintModel.findById(complaintToBeClosed);
-    if (!yourComplaint)
-      throw new Custom_error({
-        errors: [{ message: 'noSuchComplaint' }],
-        statusCode: 401,
-      });
+    let lodgedBy = await UserModel.findById(req.complaint!.lodgedBy);
+    lodgedBy = lodgedBy!.toJSON();
     if (
-      permanentUser?.designation == Designations.JUNIOR_ENGINEER &&
-      JSON.stringify(yourComplaint.currentlyAssignedTo) ==
-        JSON.stringify(req.permanentUser?._id)
+      JSON.stringify(req.complaint!.currentlyAssignedTo) ==
+      JSON.stringify(req.permanentUser?._id)
     ) {
-      await ComplaintModel.findByIdAndUpdate(complaintToBeClosed, {
+      await ComplaintModel.findByIdAndUpdate(complaint, {
         isComplete: true,
+      });
+      sendMailViaThread({
+        text: `Your complaint with ID ${
+          req.complaint!.complaintId
+        } has been successfully closed`,
+        subject: 'Construction Cell',
+        from_info: `${process.env.EMAIL}`,
+        html: `<h1>Your complaint with ID ${
+          req.complaint!.complaintId
+        } has been successfully closed`,
+        toSendMail: lodgedBy!.email,
+        cc: null,
+        attachment: null,
       });
       const response = new Custom_response(
         true,
@@ -46,17 +64,20 @@ const closeComplaint: sync_middleware_type = async_error_handler(
       return;
     } else if (
       JSON.stringify(permanentUser!._id) ==
-      JSON.stringify(yourComplaint.lodgedBy)
+      JSON.stringify(req.complaint!.lodgedBy)
     ) {
-      await ComplaintModel.findByIdAndUpdate(complaintToBeClosed, {
+      await ComplaintModel.findByIdAndUpdate(complaint, {
         isComplete: true,
       });
-      const lodgedBy = await UserModel.findById(yourComplaint.lodgedBy);
       sendMailViaThread({
-        text: `Your complaint with ID ${yourComplaint.complaintId} has been successfully closed`,
+        text: `Your complaint with ID ${
+          req.complaint!.complaintId
+        } has been successfully closed`,
         subject: 'Construction Cell',
         from_info: `${process.env.EMAIL}`,
-        html: `<h1>Your complaint with ID ${yourComplaint.complaintId} has been successfully closed`,
+        html: `<h1>Your complaint with ID ${
+          req.complaint!.complaintId
+        } has been successfully closed`,
         toSendMail: lodgedBy!.email,
         cc: null,
         attachment: null,

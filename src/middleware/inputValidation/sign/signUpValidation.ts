@@ -3,9 +3,12 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { requestWithDeviceFingerprint, Designations } from '../types/types';
-import { TemporaryUserModel } from '../models/temporaryUser';
-import { UserModel } from '../models/userSchema';
+import {
+  requestWithDeviceFingerprint,
+  Designations,
+} from '../../../types/types';
+import { TemporaryUserModel } from '../../../models/temporaryUser';
+import { UserModel } from '../../../models/userSchema';
 const signUpValidation: sync_middleware_type = async_error_handler(
   async (req: requestWithDeviceFingerprint, res, next) => {
     const { name, phone, email, designation, hostel, department, password } =
@@ -62,14 +65,24 @@ const signUpValidation: sync_middleware_type = async_error_handler(
         errors: [{ message: 'pleaseGiveYourDepartment' }],
         statusCode: 400,
       });
-    const alreadyUser = await TemporaryUserModel.find_one({ email });
-    if (alreadyUser) {
-      if (alreadyUser.expires > new Date(Date.now()))
+    const alreadyUserEmail = await TemporaryUserModel.find_one({ email });
+    if (alreadyUserEmail) {
+      if (alreadyUserEmail.expires > new Date(Date.now()))
         throw new Custom_error({
           errors: [{ message: 'tryAfterSomeTime' }],
           statusCode: 400,
         });
-      else await TemporaryUserModel.findByIdAndDelete(alreadyUser._id);
+      else await TemporaryUserModel.findByIdAndDelete(alreadyUserEmail._id);
+    }
+    const alreadyUserPhone = await TemporaryUserModel.find_one({ phone });
+    console.log(alreadyUserPhone);
+    if (alreadyUserPhone) {
+      if (alreadyUserPhone.expires > new Date(Date.now()))
+        throw new Custom_error({
+          errors: [{ message: 'tryAfterSomeTime' }],
+          statusCode: 400,
+        });
+      else await TemporaryUserModel.findByIdAndDelete(alreadyUserPhone._id);
     }
     const permanentUserEmail = await UserModel.find_one({ email });
     const permanentUserPhone = await UserModel.find_one({ phone });

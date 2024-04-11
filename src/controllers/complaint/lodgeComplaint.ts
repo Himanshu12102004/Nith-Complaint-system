@@ -10,14 +10,10 @@ import { UserModel } from '../../models/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { io } from '../../socket';
+import { isEngineer } from '../../utils/hierarchy/isEngineer';
 const lodgeComplaint: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
-    console.log(req.permanentUser);
-    if (
-      req.permanentUser?.designation == Designations.ASSISTANT_ENGINEER ||
-      req.permanentUser?.designation == Designations.JUNIOR_ENGINEER ||
-      req.permanentUser?.designation == Designations.CHIEF_EXECUTIVE_ENGINEER
-    )
+    if (isEngineer(req.permanentUser!.designation))
       throw new Custom_error({
         errors: [{ message: 'notAllowedTolodgeComplaints' }],
         statusCode: 403,
