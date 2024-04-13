@@ -9,6 +9,8 @@ import {
 } from '../../../types/types';
 import { TemporaryUserModel } from '../../../models/temporaryUser';
 import { UserModel } from '../../../models/userSchema';
+import { HostelModel } from '../../../models/hostelModel';
+import { encrypt } from '../../../../security/secrets/encrypt';
 const signUpValidation: sync_middleware_type = async_error_handler(
   async (req: requestWithDeviceFingerprint, res, next) => {
     const { name, phone, email, designation, hostel, department, password } =
@@ -47,7 +49,8 @@ const signUpValidation: sync_middleware_type = async_error_handler(
         designation == Designations.ASSISTANT_ENGINEER ||
         designation == Designations.FACULTY ||
         designation == Designations.CHIEF_EXECUTIVE_ENGINEER ||
-        designation == Designations.SUPERVISOR
+        designation == Designations.SUPERVISOR ||
+        designation == Designations.FI_CONSTRUCTION_CELL
       )
     ) {
       throw new Custom_error({
@@ -60,12 +63,42 @@ const signUpValidation: sync_middleware_type = async_error_handler(
         errors: [{ message: 'pleaseGiveYourHostel' }],
         statusCode: 400,
       });
+    if (designation == Designations.WARDEN) {
+      const existingHostel = await HostelModel.findOne({ name: hostel });
+      const existingWarden = await UserModel.findOne({
+        hostel: encrypt(hostel.trim()),
+      });
+      const existingWardenInTemp = await TemporaryUserModel.findOne({
+        hostel: encrypt(hostel.trim()),
+      });
+
+      if (!existingHostel)
+        throw new Custom_error({
+          errors: [{ message: 'pleaseGiveAValidHostel' }],
+          statusCode: 400,
+        });
+      if (existingWardenInTemp)
+        if (existingWardenInTemp.expires > new Date(Date.now()))
+          throw new Custom_error({
+            errors: [{ message: 'tryAfterSomeTime' }],
+            statusCode: 400,
+          });
+        else
+          await TemporaryUserModel.findByIdAndDelete(existingWardenInTemp._id);
+      if (existingWarden)
+        throw new Custom_error({
+          errors: [{ message: 'wardenAlreadyExists' }],
+          statusCode: 400,
+        });
+    }
+
     if (designation == Designations.FACULTY && !department)
       throw new Custom_error({
         errors: [{ message: 'pleaseGiveYourDepartment' }],
         statusCode: 400,
       });
     const alreadyUserEmail = await TemporaryUserModel.find_one({ email });
+    const alreadyUserPhone = await TemporaryUserModel.find_one({ phone });
     if (alreadyUserEmail) {
       if (alreadyUserEmail.expires > new Date(Date.now()))
         throw new Custom_error({
@@ -74,7 +107,6 @@ const signUpValidation: sync_middleware_type = async_error_handler(
         });
       else await TemporaryUserModel.findByIdAndDelete(alreadyUserEmail._id);
     }
-    const alreadyUserPhone = await TemporaryUserModel.find_one({ phone });
     console.log(alreadyUserPhone);
     if (alreadyUserPhone) {
       if (alreadyUserPhone.expires > new Date(Date.now()))

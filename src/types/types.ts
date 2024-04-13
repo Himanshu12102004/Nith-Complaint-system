@@ -9,6 +9,7 @@ export enum Designations {
   ASSISTANT_ENGINEER = 'Assistant Engineer',
   JUNIOR_ENGINEER = 'Junior Engineer',
   SUPERVISOR = 'Supervisor',
+  FI_CONSTRUCTION_CELL = 'FI construction cell',
 }
 
 export enum RequestedFor {
@@ -19,6 +20,7 @@ export enum RequestedFor {
 
 export interface requestWithDeviceFingerprint extends Request {
   deviceFingerprint?: string;
+  operatingSystem?: string;
 }
 export interface requestWithTempUser extends requestWithDeviceFingerprint {
   tempUser?: UserDoc;

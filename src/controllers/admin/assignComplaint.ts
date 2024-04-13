@@ -12,6 +12,11 @@ import { io } from '../../socket';
 const assignComplaints: sync_middleware_type = async_error_handler(
   async (req: requestWithComplaintAndEngineer, res, next) => {
     const { engineer, complaint } = req.body;
+    if (req.complaint!.isComplete)
+      throw new Custom_error({
+        errors: [{ message: 'complaintAlreadyClosed' }],
+        statusCode: 400,
+      });
     await UserModel.findByIdAndUpdate(engineer, {
       $push: { assignedComplaints: complaint },
     });

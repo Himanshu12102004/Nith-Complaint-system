@@ -13,6 +13,8 @@ import { getCurrentUser } from '../controllers/sign/getCurrentUser';
 import { forgotPassword } from '../controllers/sign/forgotPassword';
 import { verifyOtpForgotPassword } from '../controllers/sign/verifyOtpForgotPassword';
 import { forgotPasswordReset } from '../controllers/sign/forgotPasswordReset';
+import { logout } from '../controllers/sign/logout';
+import { logOutFromAllDevices } from '../controllers/sign/logOutFromAllDevices';
 export const signUpInRouter = express.Router();
 signUpInRouter.post('/signup', getDeviceInfo, signUpValidation, signUp);
 signUpInRouter.post('/signin', getDeviceInfo, signIn);
@@ -29,3 +31,9 @@ signUpInRouter.post(
   verifyOtpForgotPassword
 );
 signUpInRouter.post('/forgotPasswordReset', getDeviceInfo, forgotPasswordReset);
+signUpInRouter.get('/logout', logout);
+signUpInRouter.get(
+  '/logOutFromAllDevices',
+  getUserFromPermanent,
+  logOutFromAllDevices
+);

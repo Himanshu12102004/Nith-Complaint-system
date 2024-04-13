@@ -4,8 +4,10 @@ function isBelowInHierarchy(above: string, below: string) {
   if (
     below == Designations.WARDEN ||
     below == Designations.FACULTY ||
+    below == Designations.FI_CONSTRUCTION_CELL ||
     above == Designations.WARDEN ||
-    above == Designations.FACULTY
+    above == Designations.FACULTY ||
+    above == Designations.FI_CONSTRUCTION_CELL
   )
     return false;
   if (above == below) return false;

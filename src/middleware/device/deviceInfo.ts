@@ -18,7 +18,7 @@ const getDeviceInfo: sync_middleware_type = async_error_handler(
       const agent = useragent.parse(userAgentFromRequest);
       const deviceInfo = `Browser: ${agent.browser}Operating System: ${agent.os}Version: ${agent.version}Is Mobile: ${agent.isMobile}Is Desktop: ${agent.isDesktop}Platform: ${agent.platform}Source: ${userAgentFromRequest}`;
       req.deviceFingerprint = deviceInfo;
-
+      req.operatingSystem = agent.os;
       next();
     } catch (err) {
       next(err);

@@ -44,6 +44,7 @@ const signIn: sync_middleware_type = async_error_handler(
     const thisSession = SessionModel.build({
       refreshToken,
       deviceFingerprint: req.deviceFingerprint!,
+      operatingSystem: req.operatingSystem!,
     });
     await thisSession.save();
     await UserModel.findByIdAndUpdate(user._id, {

@@ -25,9 +25,17 @@ export const signUp: sync_middleware_type = async_error_handler(
     const cee = await UserModel.findOne({
       designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
     });
+    const fi = await UserModel.findOne({
+      designation: encrypt(Designations.FI_CONSTRUCTION_CELL),
+    });
     if (cee && designation == Designations.CHIEF_EXECUTIVE_ENGINEER)
       throw new Custom_error({
         errors: [{ message: 'ceeAlreadyExits' }],
+        statusCode: 401,
+      });
+    if (fi && designation == Designations.FI_CONSTRUCTION_CELL)
+      throw new Custom_error({
+        errors: [{ message: 'fiAlreadyExits' }],
         statusCode: 401,
       });
     const otp = await getOtp();
