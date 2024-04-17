@@ -14,6 +14,7 @@ import { isEngineerBelow } from '../middleware/engineer/isEngineerBelow';
 import { attachQueryOfEnggUnderYou } from '../middleware/inputValidation/filters/attachQueryOfEnggUnderYou';
 import { makeEngineerValidation } from '../middleware/inputValidation/sign/makeEngineerValidation';
 import { isEngineerVerified } from '../middleware/inputValidation/engineer/isEngineerVerified';
+import { deleteEngineer } from '../controllers/admin/deleteEngineer';
 const router = express.Router();
 router
   .route('/getUnverifiedEngineers')
@@ -47,4 +48,7 @@ router
 router
   .route('/makeEngineers')
   .post(getUserFromPermanent, makeEngineerValidation, makeEngineers);
+router
+  .route('/deleteEngineer')
+  .delete(getUserFromPermanent, doesEngineerExist, deleteEngineer);
 export { router as adminRouter };
