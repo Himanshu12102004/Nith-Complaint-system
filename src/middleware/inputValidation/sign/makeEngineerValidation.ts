@@ -34,7 +34,10 @@ const makeEngineerValidation: sync_middleware_type = async_error_handler(
         statusCode: 400,
       });
     }
-    if (!email) req.body.email = crypto.randomBytes(10).toString('hex');
+    if (!email) {
+      email = crypto.randomBytes(10).toString('hex');
+      req.body.email = email;
+    }
     const alreadyUserEmail = await TemporaryUserModel.find_one({ email });
     if (alreadyUserEmail) {
       if (alreadyUserEmail.expires > new Date(Date.now()))

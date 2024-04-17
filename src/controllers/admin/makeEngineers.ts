@@ -6,12 +6,13 @@ import {
 import { requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/userSchema';
 import { hashPassword } from '../../../security/passwords/password';
+import { encrypt } from '../../../security/secrets/encrypt';
 
 const makeEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     let { name, phone, email, designation, hostel, department, password } =
       req.body;
-    password = hashPassword(password);
+    password = await hashPassword(password);
     const madeUser = UserModel.build({
       name,
       email,
@@ -22,7 +23,10 @@ const makeEngineers: sync_middleware_type = async_error_handler(
       department,
     });
     await madeUser.save();
-    await UserModel.updateOne({ email }, { $set: { isVerifiedByCEE: true } });
+    await UserModel.updateOne(
+      { email: encrypt(email) },
+      { $set: { isVerifiedByCEE: true } }
+    );
     const response = new Custom_response(
       true,
       null,
