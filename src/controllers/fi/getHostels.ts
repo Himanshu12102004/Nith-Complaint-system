@@ -9,12 +9,11 @@ import { Request, Response, NextFunction } from 'express';
 
 const getAllHostels: sync_middleware_type = async_error_handler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const hostels = await HostelModel.find({}, 'name');
-    const hostelNames = hostels.map((hostel) => hostel.name);
+    const hostels = await HostelModel.find({});
     const response = new Custom_response(
       true,
       null,
-      { hostels: hostelNames },
+      { hostels },
       'success',
       200,
       null
