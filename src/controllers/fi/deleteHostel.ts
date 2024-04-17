@@ -27,8 +27,11 @@ const deleteHostel: sync_middleware_type = async_error_handler(
         errors: [{ message: 'hostelNotFound' }],
         statusCode: 404,
       });
-    await UserModel.deleteOne({ hostel: encrypt(hostel) });
-    await HostelModel.findOneAndDelete({ name: hostel });
+    await UserModel.deleteOne({
+      hostel: encrypt(hostel),
+      designation: encrypt(Designations.WARDEN),
+    });
+    await HostelModel.deleteOne({ name: hostel });
     const response = new Custom_response(
       true,
       null,
