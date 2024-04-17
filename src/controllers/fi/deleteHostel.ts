@@ -6,6 +6,8 @@ import {
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
 import { HostelModel } from '../../models/hostelModel';
+import { UserModel } from '../../models/userSchema';
+import { encrypt } from '../../../security/secrets/encrypt';
 const deleteHostel: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const { hostel } = req.body;
@@ -25,6 +27,7 @@ const deleteHostel: sync_middleware_type = async_error_handler(
         errors: [{ message: 'hostelNotFound' }],
         statusCode: 404,
       });
+    await UserModel.deleteOne({ hostel: encrypt(hostel) });
     await HostelModel.findOneAndDelete({ name: hostel });
     const response = new Custom_response(
       true,
