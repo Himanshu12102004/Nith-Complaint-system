@@ -11,9 +11,7 @@ dotenv.config({ path: 'config.env' });
 declare global {
   var emails: {};
 }
-global.emails = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '../email/email.json'), 'utf8')
-);
+
 const init = async () => {
   try {
     if (!process.env.MONGO_URI)

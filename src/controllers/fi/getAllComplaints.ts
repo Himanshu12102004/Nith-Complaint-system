@@ -26,6 +26,10 @@ const getAllComplaints: sync_middleware_type = async_error_handler(
       .populate(
         'historyOfComplaint.assignedTo',
         '-sessions -password -complaints -assignedComplaints'
+      )
+      .populate(
+        'currentlyAssignedTo',
+        '-sessions -password -complaints -assignedComplaints'
       );
     const { pageNo, pageSize } = req.moreFilters.pages;
     const totalComplatints = complaints?.length;
@@ -37,7 +41,7 @@ const getAllComplaints: sync_middleware_type = async_error_handler(
     const response = new Custom_response(
       true,
       null,
-      { assignedComplaints: complaintsToBeShown, totalPages, totalComplatints },
+      { complaints: complaintsToBeShown, totalPages, totalComplatints },
       'success',
       200,
       null

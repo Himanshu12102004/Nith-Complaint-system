@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verificaiton</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 62.5%;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            min-width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            /* min-width: 60rem; */
+            max-width: 65rem;
+            padding: 2rem;
+            border-radius: 1rem;
+            outline: 1px solid #f0f7f4;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        header {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.6rem 1.2rem;
+            /* background-color: #e6f4f0; */
+            border-radius: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #989898
+        }
+
+        header span {
+            font-size: 2.4rem;
+            font-weight: 500;
+            /* color: #989898; */
+        }
+
+        .otp {
+            margin-top: 4.4rem;
+            min-height: 4.4rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-direction: row;
+        }
+
+        .otp__digit {
+            font-size: 2.4rem;
+            font-weight: 600;
+            color: #333;
+            padding: 1.2rem;
+            min-height: 4.4rem;
+            min-width: 5.4rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e6f4f0;
+        }
+
+        span.highlight {
+            color: #e09b04;
+        }
+
+
+        .body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .name {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <h1>**{{TEAM}}** Complaint System</h1>
+            <span>Let's get you
+                <span class="highlight">Signed Up </span></span>
+        </header>
+        <div class="body">
+
+            <span class="name">Hi **{{NAME}}**, Use this code to Sign up to **{{TEAM}}** Complaint System</span>
+            <span class="name">
+                The OTP is valid for 1 minutes
+            </span>
+        </div>
+        <div class="otp">
+            <span class="otp__digit">
+                **{{DIGIT1}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT2}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT3}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT4}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT5}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT6}}**
+            </span>
+
+        </div>
+        <p>Thank You for Using **{{TEAM}}**</p>
+        <p style="margin-top: 1.2rem;">**{{MADE_BY}}**</p>
+    </div>
+</body>
+
+</html>

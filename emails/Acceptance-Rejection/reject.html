@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- prettier-ignore -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 62.5%;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            /* align-self: stretch; */
+            max-width: 50rem;
+            padding: 2rem;
+            border-radius: 1rem;
+            outline: 1px solid #ffcccc;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            padding: 1.6rem 1.2rem;
+            /* prettier-ignore */
+            background-color: #ffe6e6;
+            border-radius: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        header span {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #989898;
+        }
+
+        main {
+            padding: 1.2rem;
+        }
+
+        main p:first-of-type {
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        main p {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            padding: 1.2rem;
+        }
+
+        span.highlight {
+            color: #e09b04;
+        }
+
+        .negative {
+            color: #e44646;
+        }
+
+        footer p {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #989898;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+
+        <header>
+            <span>From **{{TEAM}}** Team to
+                <span class="highlight">
+                    **{{ENGINEER_NAME}}**
+                </span>
+            </span>
+            <h1>
+                Rejection Email
+            </h1>
+        </header>
+
+        <main>
+            <p>Hi
+                <span class="highlight">
+                    **{{ENGINEER_NAME}}**
+                </span>,
+            </p>
+            <!-- Rejection Email -->
+            <p>
+                We regret to inform you that your application for the <span class="highlight"> **{{POST}}**
+                </span>position has been<span class="negative"> rejected</span>. If you are a part of the Construction
+                Cell Team and have any queries, please feel free to reach out to us.
+            </p>
+            <p>
+                We appreciate your interest in the project and wish you the best of luck in your future endeavors.
+
+            </p>
+        </main>
+
+        <footer>
+            <p>Have a nice day,</p>
+            <p>
+                **{{TEAM}}** Team
+            </p>
+            <p style="margin-top: 1.2rem;">**{{MADE_BY}}**</p>
+
+        </footer>
+
+    </div>
+</body>
+
+</html>

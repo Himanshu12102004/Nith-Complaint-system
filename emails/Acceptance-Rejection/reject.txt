@@ -1,0 +1,12 @@
+From **{{TEAM}}** Team to **{{ENGINEER_NAME}}**
+Rejection Email
+
+Hi **{{ENGINEER_NAME}}**,
+
+We regret to inform you that your application for the **{{POST}}** position has been **rejected**. If you are a part of the Construction Cell Team and have any queries, please feel free to reach out to us.
+
+We appreciate your interest in the project and wish you the best of luck in your future endeavors.
+
+Have a nice day,
+**{{TEAM}}** Team
+**{{MADE_BY}}**

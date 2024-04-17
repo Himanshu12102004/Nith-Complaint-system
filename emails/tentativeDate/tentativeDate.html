@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Assignment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 62.5%;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            /* align-self: stretch; */
+            max-width: 50rem;
+            padding: 2rem;
+            border-radius: 1rem;
+            /* outline: 1px solid #2fe093; */
+        }
+
+        .highlight {
+            color: hsl(154, 74%, 35%);
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            padding: 1.6rem 1.2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            border-radius: 0.5rem;
+            background-color: #e6f4f0;
+            padding: 1.6rem 1.2rem;
+        }
+
+        h5 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #989898;
+        }
+
+        h3 {
+            font-size: 2.4rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .names {
+            /* padding: 1.6rem 1.2rem; */
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .name {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .subname {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #989898;
+        }
+
+        .highlightYellow {
+            color: #e09b04;
+        }
+
+        ul {
+            margin: 0 1.2rem;
+
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            font-size: 1.4rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .help {
+            font-size: 1.4rem;
+            color: #989898;
+        }
+
+        footer {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.4rem;
+
+        }
+
+        footer p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #989898;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <h5>**{{TEAM}}** Complaint System</h5>
+            <h3>Complaint Registered</h3>
+        </header>
+        <main>
+            <div class="names">
+                <p class="name">To
+                    <span class="highlight">**{{CUSTOMERNAME}}**</span>
+                </p>
+                <p class="subname">Your Complaint with Complaint ID <span
+                        class="highlightYellow">**{{COMPLAINT_ID}}**</span>
+                    has been successfully assigned
+                    to <span class="highlightYellow">**{{ASSIGNED_TO}}** </span>Please check the details below:</p>
+            </div>
+            <ul>
+                <li><strong class="highlight">Complaint ID:</strong> **{{COMPLAINT_ID}}**</li>
+                <li><strong class="highlight">Complaint Type:</strong> **{{COMPLAINT_TYPE}}**</li>
+                <li><strong class="highlight">Assigned To:</strong> **{{ASSIGNED_TO}}**</li>
+                <li><strong class="highlight">Tentative Completion:</strong> **{{TENTATIVE_COMPLETION}}**</li>
+            </ul>
+            <p class="help">
+                Your complaint will be resolved as soon as possible. Please be patient.
+            </p>
+        </main>
+        <footer>
+            <p>Thank you.</p>
+            <p>**{{TEAM}}** Complaint System</p>
+            <p style="margin-top: 1.2rem;">**{{MADE_BY}}**</p>
+        </footer>
+    </div>
+</body>
+
+</html>

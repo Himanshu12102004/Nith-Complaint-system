@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verificaiton</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 62.5%;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            min-width: 100vw;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            max-width: 60rem;
+            padding: 2rem;
+            border-radius: 1rem;
+            outline: 1px solid #d8bbbb;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        header {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.6rem 1.2rem;
+            /* background-color: #e6f4f0; */
+            border-radius: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #989898
+        }
+
+        header span {
+            font-size: 2.4rem;
+            font-weight: 500;
+            /* color: #989898; */
+        }
+
+        .otp {
+            margin-top: 4.4rem;
+            min-height: 4.4rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-direction: row;
+        }
+
+        .otp__digit {
+            font-size: 2.4rem;
+            font-weight: 600;
+            color: #333;
+            padding: 1.2rem;
+            min-height: 4.4rem;
+            min-width: 5.4rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4e6e6;
+        }
+
+        span.highlight {
+            color: #e09b04;
+        }
+
+
+        .body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .name {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        img {
+            width: 3.2rem;
+            height: 3.2rem;
+        }
+
+        .negative {
+            color: red;
+        }
+
+        .flex-bttom {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            align-items: flex-end;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <h1>**{{TEAM}}** Complaint System</h1>
+            <div class="flex-bttom">
+                <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEAklEQVR4nO2cTW9NQRiAn6RfiQZBfbNCo+I38BdIpapEYqfa0AhdWIlYC10J/0DY0aRbUi29CKv66I5YCNFP3z0yNeJ2cu7tvdWeec/M+ySTNPfe3vPOPOc9d87MnAFFURRFURRF2Qx0AH3AAPAa+AR8t+WTfc28dw04AmzSZltamoAzQAFIFlkeA6ftdymLZLvNhJn/EOGWaZs529RK5dTZjJhcQhFuMZIvAg0qpjwtwIsyDfkDuA9cAg7az6+xEuvs33vse+YzD+z/lPq+58BulZJOGzBVouHeAD3AhkU03kb7v2Mlvttk4iGVMp8u4FdKY70FjgE1S9BgtcBx4F3KccyxT6mUfzLSztzrwMplaKRVwI0Sx4xeSltKZnwB2jM4WzvssdxMaSVSWlJ+Mz4D+zKMYb89pvub0kxk1Kf0pmYyllEsxc2UZ7bXFg0XUq7f7R7jOZoSTy8R3YFPp/yA++amE5O5nG4hAvqcir8HVvsOij+9L7dLfIXAWZ8yNmXuM6RwIiVL1hEwPU6Fx+wNmxRq7PB9cYzdBIw7hG4ESeOsE+MjAp5cmnUGCs04k8Q4fxbFORvqJJfbtTSjtlJ56MR6mAh6V2Z4XCqXnVivEiADTiUPIJdWJ9Z+AsSdjzATSVLZ68Rqel7B8dGp5Frk0uTE+oEA+eZU0gwwSqXBifUrAeIO3kknyVm8wVcwyVm8wVcwyVm8wVcwyVm8wVcwyVm8wVcwyVm8wVcwyVm8wVcwyVm8wVcwyVm8wVcwyVm8c0MfZnpzuMwi6ZjKFDBkl8ZmPixklsc8FdAIidDyxM48ZoKxrzJYUEohq9WP3QLOwCQnpTMLIcPOQe8CW7M4sHDMc4v3nLYxc/PLjvvsnz5AOX+ZbHHbTJABbloqnttHhZRHhQhDhQhDhQhDhQhDhQhDhQhDhQhDhQhDhQhDhQhDhQhDhQgjWiGNdvuLgp3PNmUEOA+s8BhXlEJ2Aq/KzNSNAjs8xRadkEbgZQXTp6OeMiU6Ib1VzGmf8xBfdEIKVW6gnDXRCZmqQoiZ/8+a6ISMVyHEbN+XNdEJGapCSCbLcGIX0lmFkJMe4otOSG2FWTLoaS+u6IRg93hfSIj5jA+iFEIFQnyhQlAhIs/ERDNEhaShlyw0Q0RcsiaE3aETe4bcKSPktse4ohXSnLJLXWJf2+UxrmiFYJ/eumUHHMdtZviUQexCJKJChKFChKFChKFChKFChKFChKFChKFChKFChKFChKFChKFChKFCYhfiztTpBmaeNzBzt/gz29qpFOZk9PtYW9xVwRIcLWS3trje7kurjc6CDwtlsk0sdpPgap5kiq2MZLmR8l/q7KMBgyk7lcZYJm1bmMvUojPjNwXE7ubAF6qXAAAAAElFTkSuQmCC"
+                    alt=""> <span>Got
+                    <span class="negative">Locked Out </span>No Worries</span>
+            </div>
+        </header>
+        <div class="body">
+
+            <span class="name">
+                Use this OTP to reset your password for **{{TEAM}}** Complaint System
+            </span>
+            <span class="name">
+                The OTP is valid for 1 minutes
+            </span>
+        </div>
+        <div class="otp">
+            <span class="otp__digit">
+                **{{DIGIT1}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT2}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT3}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT4}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT5}}**
+            </span>
+            <span class="otp__digit
+            ">
+                **{{DIGIT6}}**
+            </span>
+
+        </div>
+        <p>Thank You for Using **{{TEAM}}**</p>
+        <p style="margin-top: 1.2rem;">**{{MADE_BY}}**</p>
+    </div>
+</body>
+
+</html>

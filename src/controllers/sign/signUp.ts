@@ -4,7 +4,6 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import path from 'path';
 import { TemporaryUserModel } from '../../models/temporaryUser';
 import {
   requestWithDeviceFingerprint,
@@ -12,12 +11,12 @@ import {
   RequestedFor,
 } from '../../types/types';
 import { getOtp } from '../../../security/otp/otp';
-import { Worker } from 'worker_threads';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { hashPassword } from '../../../security/passwords/password';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { UserModel } from '../../models/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
+import { getRequiredEmail } from '../../../emails/function';
 export const signUp: sync_middleware_type = async_error_handler(
   async (req: requestWithDeviceFingerprint, res, next) => {
     const { name, phone, email, designation, hostel, department, password } =
@@ -57,6 +56,7 @@ export const signUp: sync_middleware_type = async_error_handler(
     });
     await user.save();
     const thisUser = await TemporaryUserModel.find_one({ email });
+    const otpEmail = getRequiredEmail({}, 'OTP');
     sendMailViaThread({
       text: `Your OTP for the NITH complaint system is ${otp.generatedOtp}`,
       subject: 'HORIZON Complaint System',
