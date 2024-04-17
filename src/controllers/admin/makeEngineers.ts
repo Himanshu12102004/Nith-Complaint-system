@@ -1,13 +1,10 @@
 import {
-  Custom_error,
   Custom_response,
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import crypto from 'crypto';
-import { Designations, requestWithPermanentUser } from '../../types/types';
+import { requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/userSchema';
-import { TemporaryUserModel } from '../../models/temporaryUser';
 import { hashPassword } from '../../../security/passwords/password';
 
 const makeEngineers: sync_middleware_type = async_error_handler(
@@ -25,6 +22,7 @@ const makeEngineers: sync_middleware_type = async_error_handler(
       department,
     });
     await madeUser.save();
+    await UserModel.updateOne({ email }, { $set: { isVerifiedByCEE: true } });
     const response = new Custom_response(
       true,
       null,

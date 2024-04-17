@@ -46,7 +46,7 @@ router
     getEngineerDetails
   );
 router
-  .route('/makeEngineers')
+  .route('/makeEngineer')
   .post(getUserFromPermanent, makeEngineerValidation, makeEngineers);
 router
   .route('/deleteEngineer')

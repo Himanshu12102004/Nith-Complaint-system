@@ -15,14 +15,12 @@ const makeEngineerValidation: sync_middleware_type = async_error_handler(
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    let { name, phone, email, designation, hostel, department, password } =
-      req.body;
+    let { name, phone, email, designation, department, password } = req.body;
     if (!name || !phone || !designation || !password)
       throw new Custom_error({
         errors: [{ message: 'giveAllCredentials' }],
         statusCode: 400,
       });
-    if (!email) email = crypto.randomBytes(10).toString('hex');
     if (!department) department = '';
     if (
       !(
@@ -36,6 +34,7 @@ const makeEngineerValidation: sync_middleware_type = async_error_handler(
         statusCode: 400,
       });
     }
+    if (!email) req.body.email = crypto.randomBytes(10).toString('hex');
     const alreadyUserEmail = await TemporaryUserModel.find_one({ email });
     if (alreadyUserEmail) {
       if (alreadyUserEmail.expires > new Date(Date.now()))
