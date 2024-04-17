@@ -32,8 +32,4 @@ signUpInRouter.post(
 );
 signUpInRouter.post('/forgotPasswordReset', getDeviceInfo, forgotPasswordReset);
 signUpInRouter.get('/logout', logout);
-signUpInRouter.get(
-  '/logOutFromAllDevices',
-  getUserFromPermanent,
-  logOutFromAllDevices
-);
+signUpInRouter.get('/logOutFromAllDevices', logOutFromAllDevices);

@@ -7,8 +7,6 @@ import {
 import {
   Designations,
   RequestedFor,
-  requestWithPermanentUser,
-  requestWithPermanentUserAndDeviceFingerPrint,
   requestWithTempUser,
 } from '../../types/types';
 import { TemporaryUserModel } from '../../models/temporaryUser';
@@ -59,7 +57,6 @@ const forgotPassword: sync_middleware_type = async_error_handler(
       else await TemporaryUserModel.findByIdAndDelete(alreadyUserPhone._id);
     }
     const otp = await getOtp();
-
     const user = TemporaryUserModel.build({
       name,
       email,

@@ -29,7 +29,7 @@ const resendOtp: sync_middleware_type = async_error_handler(
       requestedFor,
       _id,
     } = req.tempUser!;
-    if (otpSentTimes >= 3)
+    if (otpSentTimes > 3)
       throw new Custom_error({
         errors: [{ message: 'tryAgainAfterSomeTime' }],
         statusCode: 400,

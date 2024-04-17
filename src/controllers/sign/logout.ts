@@ -35,13 +35,11 @@ const logout: sync_middleware_type = async_error_handler(
         statusCode: 401,
       });
 
-    // Use $pull to remove the token from the sessions array in the user document
     await UserModel.updateOne(
       { _id: decodedJWT._id },
       { $pull: { sessions: token } }
     );
 
-    // Delete the session document from the SessionModel
     await SessionModel.deleteOne({ refreshToken: token });
 
     const response = new Custom_response(
