@@ -29,12 +29,12 @@ export const signUp: sync_middleware_type = async_error_handler(
     });
     if (cee && designation == Designations.CHIEF_EXECUTIVE_ENGINEER)
       throw new Custom_error({
-        errors: [{ message: 'ceeAlreadyExits' }],
+        errors: [{ message: 'ceeAlreadyExists' }],
         statusCode: 401,
       });
     if (fi && designation == Designations.FI_CONSTRUCTION_CELL)
       throw new Custom_error({
-        errors: [{ message: 'fiAlreadyExits' }],
+        errors: [{ message: 'fiAlreadyExists' }],
         statusCode: 401,
       });
     const otp = await getOtp();

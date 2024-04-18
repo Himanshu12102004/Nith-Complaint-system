@@ -21,7 +21,7 @@ const deleteEngineer: sync_middleware_type = async_error_handler(
       });
     if (
       req.engineer!.designation != Designations.JUNIOR_ENGINEER &&
-      req.engineer!.designation != Designations.JUNIOR_ENGINEER &&
+      req.engineer!.designation != Designations.ASSISTANT_ENGINEER &&
       req.engineer!.designation != Designations.SUPERVISOR
     )
       throw new Custom_error({
