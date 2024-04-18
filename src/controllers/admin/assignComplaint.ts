@@ -4,7 +4,10 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { requestWithComplaintAndEngineer } from '../../types/types';
+import {
+  Designations,
+  requestWithComplaintAndEngineer,
+} from '../../types/types';
 import { UserModel } from '../../models/userSchema';
 import { ComplaintModel } from '../../models/complaintModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
@@ -15,6 +18,15 @@ const assignComplaints: sync_middleware_type = async_error_handler(
     if (req.complaint!.isComplete)
       throw new Custom_error({
         errors: [{ message: 'complaintAlreadyClosed' }],
+        statusCode: 400,
+      });
+
+    if (
+      req.permanentUser?.designation == Designations.JUNIOR_ENGINEER &&
+      new Date(req.complaint!.tentativeDateOfCompletion).getFullYear() == 1970
+    )
+      throw new Custom_error({
+        errors: [{ message: 'assignATentativeDateFirst' }],
         statusCode: 400,
       });
     await UserModel.findByIdAndUpdate(engineer, {
