@@ -21,7 +21,7 @@ const parseFilters = async (
     }
     if (filters.complaintId) {
       console.log(filters);
-      query.complaintId = filters.complaintId;
+      query.complaintId = new RegExp('^' + filters.complaintId);
       req.parsedFilters = query;
       next();
       return;
