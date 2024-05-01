@@ -3,7 +3,7 @@ import { getUserFromPermanent } from '../middleware/user/getUserFromPermanent';
 import { lodgeComplaint } from '../controllers/complaint/lodgeComplaint';
 import { getYourComplaints } from '../controllers/complaint/getYourComplaints';
 import { getAssignedComplaints } from '../controllers/complaint/getAssignedComplaints';
-import { validateComplaintType } from '../middleware/inputValidation/sign/validateComplaintType';
+import { validateComplaintType } from '../middleware/inputValidation/complaint/validateComplaintType';
 import { parseFilters } from '../middleware/inputValidation/filters/parseFilters';
 import { isNotEngineerMiddleware } from '../middleware/engineer/isNotEngineer';
 import { isEngineerMiddleware } from '../middleware/engineer/isEngineer';

@@ -6,6 +6,7 @@ import { complaintRouter } from './routers/complaintRouter';
 import { adminRouter } from './routers/adminRouter';
 import { complaintControllerRouter } from './routers/complaintControlsRouter';
 import { fiRouter } from './routers/fiRouter';
+import { openRouter } from './routers/openRouter';
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use('/api/v1', complaintRouter);
 app.use('/api/v1', adminRouter);
 app.use('/api/v1', complaintControllerRouter);
 app.use('/api/v1', fiRouter);
+app.use('/api/v1', openRouter);
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   const err = new Custom_error({
     errors: [{ message: 'pageNotFound' }],

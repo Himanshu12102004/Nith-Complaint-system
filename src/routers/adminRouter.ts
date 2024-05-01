@@ -15,6 +15,9 @@ import { attachQueryOfEnggUnderYou } from '../middleware/inputValidation/filters
 import { makeEngineerValidation } from '../middleware/inputValidation/sign/makeEngineerValidation';
 import { isEngineerVerified } from '../middleware/inputValidation/engineer/isEngineerVerified';
 import { deleteEngineer } from '../controllers/admin/deleteEngineer';
+import { addNatureAndSubnatureOfComplaint } from '../controllers/admin/addNatureAndSubnatureOfComplaint';
+import { deleteNatureAndSubNatureOfComplaint } from '../controllers/admin/deleteNatureAndSubNatureOfComplaint';
+import { getAllNatures } from '../controllers/admin/getAllNatures';
 const router = express.Router();
 router
   .route('/getUnverifiedEngineers')
@@ -51,4 +54,10 @@ router
 router
   .route('/deleteEngineer')
   .delete(getUserFromPermanent, doesEngineerExist, deleteEngineer);
+router
+  .route('/addNature')
+  .post(getUserFromPermanent, addNatureAndSubnatureOfComplaint);
+router
+  .route('/deleteNature')
+  .post(getUserFromPermanent, deleteNatureAndSubNatureOfComplaint);
 export { router as adminRouter };

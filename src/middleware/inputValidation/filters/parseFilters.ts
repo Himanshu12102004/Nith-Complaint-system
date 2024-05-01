@@ -26,6 +26,15 @@ const parseFilters = async (
       next();
       return;
     }
+    if (filters.isAssigned == 'yes') {
+      query.currentlyAssignedTo = {
+        $ne: new mongoose.Types.ObjectId(req.permanentUser!._id as string),
+      };
+    } else if (filters.isAssigned == 'no') {
+      query.currentlyAssignedTo = new mongoose.Types.ObjectId(
+        req.permanentUser!._id as string
+      );
+    }
     if (filters.lodgedBy) {
       query.lodgedBy = new mongoose.Types.ObjectId(filters.lodgedBy as string);
     }

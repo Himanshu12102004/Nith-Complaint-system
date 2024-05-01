@@ -80,13 +80,14 @@ const getAssignedComplaints: sync_middleware_type = async_error_handler(
     });
 
     let complaintsProcessed = await Promise.all(complaintsPromiseArray!);
+
     let finalComplaints = complaintsProcessed.filter((elem) => {
       if (elem) return true;
     });
     const { pageNo, pageSize } = req.moreFilters.pages;
     const totalComplatints = finalComplaints?.length;
     const totalPages = Math.ceil(totalComplatints! / pageSize);
-    let complaintsToBeShown = complaintsProcessed?.slice(
+    let complaintsToBeShown = finalComplaints?.slice(
       (pageNo - 1) * pageSize,
       (pageNo - 1) * pageSize + pageSize
     );
