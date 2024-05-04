@@ -14,11 +14,18 @@ const getFullNatureDetails = async_error_handler(
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    const natures = NatureModel.find();
+    const natures = await NatureModel.find();
+    const formattedNatures = natures.map((elem) => {
+      return {
+        name: elem.nature.name,
+        isActive: elem.nature.isActive,
+        subNatures: elem.subNature,
+      };
+    });
     const response = new Custom_response(
       true,
       null,
-      { nature: natures },
+      { natureList: formattedNatures },
       'success',
       200,
       null
