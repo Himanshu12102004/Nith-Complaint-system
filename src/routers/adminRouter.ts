@@ -17,7 +17,6 @@ import { isEngineerVerified } from '../middleware/inputValidation/engineer/isEng
 import { deleteEngineer } from '../controllers/admin/deleteEngineer';
 import { addNatureAndSubnatureOfComplaint } from '../controllers/admin/addNatureAndSubnatureOfComplaint';
 import { deleteNatureAndSubNatureOfComplaint } from '../controllers/admin/deleteNatureAndSubNatureOfComplaint';
-import { getAllNatures } from '../controllers/admin/getAllNatures';
 import { getFullNatureDetails } from '../controllers/admin/getFullNatureDetails';
 const router = express.Router();
 router

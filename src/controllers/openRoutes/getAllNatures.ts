@@ -41,7 +41,7 @@ const getAllNatures: sync_middleware_type = async_error_handler(
     const response = new Custom_response(
       true,
       null,
-      { natures: formattedNatures },
+      { natures: formattedNatures, subNatures: formattedSubNatures },
       'success',
       200,
       null
