@@ -18,8 +18,10 @@ const getFullNatureDetails = async_error_handler(
     const formattedNatures = natures.map((elem) => {
       return {
         name: elem.nature.name,
-        isActive: elem.nature.isActive,
-        subNatures: elem.subNature,
+        active: elem.nature.isActive,
+        subNatures: elem.subNature.map((elem) => {
+          return { name: elem.name, active: elem.isActive };
+        }),
       };
     });
     const response = new Custom_response(
