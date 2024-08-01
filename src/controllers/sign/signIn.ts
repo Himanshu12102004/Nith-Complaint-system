@@ -4,10 +4,10 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { checkPasswords } from '../../../security/passwords/password';
 import { createJwt } from '../../../security/jwt/createJwt';
-import { SessionModel } from '../../models/sessionModel';
+import { SessionModel } from '../../models/users/sessionModel';
 import { requestWithDeviceFingerprint } from '../../types/types';
 
 const signIn: sync_middleware_type = async_error_handler(

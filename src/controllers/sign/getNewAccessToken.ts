@@ -4,10 +4,10 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { SessionModel } from '../../models/sessionModel';
+import { SessionModel } from '../../models/users/sessionModel';
 import { checkPasswords } from '../../../security/passwords/password';
 import { requestWithDeviceFingerprint } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { jwtVerification } from '../../../security/jwt/decodeJwt';
 const getNewAccessToken: sync_middleware_type = async_error_handler(

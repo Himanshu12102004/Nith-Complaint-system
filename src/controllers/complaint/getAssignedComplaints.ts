@@ -4,7 +4,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { requestWithPermanentUserAndParsedFilters } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 const getAssignedComplaints: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUserAndParsedFilters, res, next) => {
     console.log(req.parsedFilters);

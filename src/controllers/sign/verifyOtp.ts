@@ -10,10 +10,10 @@ import {
   requestWithTempUser,
 } from '../../types/types';
 import { checkPasswords } from '../../../security/passwords/password';
-import { UserModel } from '../../models/userSchema';
-import { TemporaryUserModel } from '../../models/temporaryUser';
+import { UserModel } from '../../models/users/userSchema';
+import { TemporaryUserModel } from '../../models/users/temporaryUser';
 import { createJwt } from '../../../security/jwt/createJwt';
-import { SessionModel } from '../../models/sessionModel';
+import { SessionModel } from '../../models/users/sessionModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { encrypt } from '../../../security/secrets/encrypt';
 import { io } from '../../socket';
@@ -89,7 +89,7 @@ const verifyOtp: sync_middleware_type = async_error_handler(
       designation == Designations.ASSISTANT_ENGINEER ||
       designation == Designations.JUNIOR_ENGINEER
     ) {
-      const ceeId = await UserModel.findOne({
+      const ceeId: any = await UserModel.findOne({
         designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
       });
       if (global.connectedUsers.get(ceeId!._id.toString()))

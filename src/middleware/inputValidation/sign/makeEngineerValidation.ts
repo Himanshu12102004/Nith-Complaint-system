@@ -5,8 +5,8 @@ import {
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../../types/types';
 import crypto from 'crypto';
-import { TemporaryUserModel } from '../../../models/temporaryUser';
-import { UserModel } from '../../../models/userSchema';
+import { TemporaryUserModel } from '../../../models/users/temporaryUser';
+import { UserModel } from '../../../models/users/userSchema';
 const makeEngineerValidation: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const permanentUser = req.permanentUser;

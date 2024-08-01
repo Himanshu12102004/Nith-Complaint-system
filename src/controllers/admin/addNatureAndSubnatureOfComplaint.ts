@@ -5,7 +5,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
-import { NatureModel } from '../../models/natureOfComplaintModel';
+import { NatureModel } from '../../models/complaints/natureOfComplaintModel';
 
 const addNatureAndSubnatureOfComplaint: sync_middleware_type =
   async_error_handler(async (req: requestWithPermanentUser, res, next) => {

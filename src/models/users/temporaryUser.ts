@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { encrypt } from '../../security/secrets/encrypt';
-import { decrypt } from '../../security/secrets/decrypt';
-import { Designations, RequestedFor } from '../types/types';
+import { encrypt } from '../../../security/secrets/encrypt';
+import { decrypt } from '../../../security/secrets/decrypt';
+import { Designations, RequestedFor } from '../../types/types';
 import { Custom_error } from '@himanshu_guptaorg/utils';
 interface UserAttributes {
   name: string;

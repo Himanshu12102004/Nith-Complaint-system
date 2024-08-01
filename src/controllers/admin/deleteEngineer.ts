@@ -9,7 +9,7 @@ import {
   requestWithEngineer,
   requestWithPermanentUser,
 } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 
 const deleteEngineer: sync_middleware_type = async_error_handler(
   async (req: requestWithEngineer, res, next) => {

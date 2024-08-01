@@ -5,8 +5,8 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { jwtVerification } from '../../../security/jwt/decodeJwt';
-import { UserModel } from '../../models/userSchema';
-import { SessionModel } from '../../models/sessionModel';
+import { UserModel } from '../../models/users/userSchema';
+import { SessionModel } from '../../models/users/sessionModel';
 
 const logout: sync_middleware_type = async_error_handler(
   async (req, res, next) => {

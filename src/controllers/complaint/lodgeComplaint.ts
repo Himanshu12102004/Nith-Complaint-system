@@ -5,12 +5,13 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
-import { ComplaintModel } from '../../models/complaintModel';
-import { UserModel } from '../../models/userSchema';
+import { ComplaintModel } from '../../models/complaints/complaintModel';
+import { UserModel } from '../../models/users/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { io } from '../../socket';
 import { isEngineer } from '../../utils/hierarchy/isEngineer';
+import mongoose from 'mongoose';
 const lodgeComplaint: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     if (isEngineer(req.permanentUser!.designation))
@@ -25,17 +26,19 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
         errors: [{ message: 'giveAllTheFields' }],
         statusCode: 403,
       });
-    const chiefExecutiveEngineerID = (await UserModel.findOne({
+    const chiefExecutiveEngineerID: any = (await UserModel.findOne({
       designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
     }))!._id;
+    const docsCount = await ComplaintModel.countDocuments();
     const complaint = ComplaintModel.build({
-      lodgedBy: req.permanentUser?._id,
+      lodgedBy: req.permanentUser?._id as mongoose.Types.ObjectId,
       location,
       natureOfComplaint,
       subNatureOfComplaint,
       description,
       currentlyAssignedTo: chiefExecutiveEngineerID,
       tentativeDateOfCompletion: new Date(0),
+      complaintId: `${docsCount}`,
       historyOfComplaint: [
         {
           assignedTo: chiefExecutiveEngineerID,
@@ -51,10 +54,10 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
       $push: { complaints: complaint._id },
     });
     sendMailViaThread({
-      text: `Your complaint with ID ${complaint.complaintId} has been successfully opened`,
+      text: `${req.permanentUser?.name},Your complaint with ID ${complaint.complaintId} has been successfully opened`,
       subject: 'Construction Cell',
       from_info: `${process.env.EMAIL}`,
-      html: `<h1>Your complaint with ID ${complaint.complaintId} has been successfully opened`,
+      html: `<h1>${req.permanentUser?.name},\n Your complaint regarding ${complaint.natureOfComplaint} with ID: ${complaint.complaintId} has been successfully opened`,
       toSendMail: req.permanentUser?.email!,
       cc: null,
       attachment: null,

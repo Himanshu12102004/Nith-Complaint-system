@@ -10,10 +10,10 @@ import {
   requestWithTempUser,
 } from '../../types/types';
 import { getOtp } from '../../../security/otp/otp';
-import { TemporaryUserModel } from '../../models/temporaryUser';
+import { TemporaryUserModel } from '../../models/users/temporaryUser';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 const resendOtp: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {
     const {
@@ -62,7 +62,7 @@ const resendOtp: sync_middleware_type = async_error_handler(
       );
       sendMailViaThread({
         text: `Your OTP for the NITH complaint system is ${otp.generatedOtp}`,
-        subject: 'HORIZON Complaint System',
+        subject: 'Construction Cell Complaint System',
         from_info: process.env.EMAIL!,
         toSendMail: email,
         html: `<h1>Your OTP for the NITH complaint system is ${otp.generatedOtp}</h1>`,
@@ -86,7 +86,7 @@ const resendOtp: sync_middleware_type = async_error_handler(
       );
       sendMailViaThread({
         text: `Your OTP for the NITH complaint system password change ${otp.generatedOtp}`,
-        subject: 'HORIZON Complaint System',
+        subject: 'Construction Cell Complaint System',
         from_info: process.env.EMAIL!,
         toSendMail: email,
         html: `<h1>Your OTP for the NITH complaint system password change ${otp.generatedOtp}</h1>`,

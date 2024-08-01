@@ -8,7 +8,7 @@ import {
   Designations,
   requestWithPermanentUserAndParsedFilters,
 } from '../../types/types';
-import { ComplaintModel } from '../../models/complaintModel';
+import { ComplaintModel } from '../../models/complaints/complaintModel';
 
 const getAllComplaints: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUserAndParsedFilters, res, next) => {

@@ -8,6 +8,7 @@ export interface ComplaintAttributes {
   description: string;
   currentlyAssignedTo: mongoose.Types.ObjectId;
   tentativeDateOfCompletion: Date;
+  complaintId: string;
   historyOfComplaint: [
     {
       assignedTo: mongoose.Types.ObjectId;
@@ -38,11 +39,6 @@ export interface ComplaintDoc extends mongoose.Document {
 interface ComplaintModel extends mongoose.Model<ComplaintDoc> {
   build(attributes: ComplaintAttributes): ComplaintDoc;
 }
-const getComplaintId = () => {
-  const min = 1000000000;
-  const max = 9999999999;
-  return `${Math.floor(Math.random() * (max - min + 1)) + min}`;
-};
 const complaintSchema = new mongoose.Schema<ComplaintDoc>({
   lodgedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   location: { type: String, required: true },
@@ -56,7 +52,7 @@ const complaintSchema = new mongoose.Schema<ComplaintDoc>({
   },
   tentativeDateOfCompletion: { type: Date, required: true },
   lodgedOn: { type: Date, default: Date.now },
-  complaintId: { type: String, default: getComplaintId },
+  complaintId: { type: String },
   isComplete: { type: Boolean, default: false },
   historyOfComplaint: [
     {

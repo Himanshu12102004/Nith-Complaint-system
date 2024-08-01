@@ -4,7 +4,7 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { TemporaryUserModel } from '../../models/temporaryUser';
+import { TemporaryUserModel } from '../../models/users/temporaryUser';
 import {
   requestWithDeviceFingerprint,
   Designations,
@@ -14,7 +14,7 @@ import { getOtp } from '../../../security/otp/otp';
 import { createJwt } from '../../../security/jwt/createJwt';
 import { hashPassword } from '../../../security/passwords/password';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
 import { getRequiredEmail } from '../../../emails/function';
 export const signUp: sync_middleware_type = async_error_handler(
@@ -27,6 +27,17 @@ export const signUp: sync_middleware_type = async_error_handler(
     const fi = await UserModel.findOne({
       designation: encrypt(Designations.FI_CONSTRUCTION_CELL),
     });
+    let ch = (email as string).charAt(0);
+    if (ch >= '0' && ch <= '9')
+      throw new Custom_error({
+        errors: [{ message: 'emailShouldNotStartWithANumber' }],
+        statusCode: 401,
+      });
+    if (!(email as string).endsWith('@nith.ac.in'))
+      throw new Custom_error({
+        errors: [{ message: 'useNithEmail' }],
+        statusCode: 401,
+      });
     if (cee && designation == Designations.CHIEF_EXECUTIVE_ENGINEER)
       throw new Custom_error({
         errors: [{ message: 'ceeAlreadyExists' }],
@@ -59,7 +70,7 @@ export const signUp: sync_middleware_type = async_error_handler(
     const otpEmail = getRequiredEmail({}, 'OTP');
     sendMailViaThread({
       text: `Your OTP for the NITH complaint system is ${otp.generatedOtp}`,
-      subject: 'HORIZON Complaint System',
+      subject: 'Construction Cell Complaint System',
       from_info: process.env.EMAIL!,
       toSendMail: email,
       html: `<h1>Your OTP for the NITH complaint system is ${otp.generatedOtp}</h1>`,

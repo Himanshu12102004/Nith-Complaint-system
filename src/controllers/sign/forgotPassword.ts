@@ -9,11 +9,11 @@ import {
   RequestedFor,
   requestWithTempUser,
 } from '../../types/types';
-import { TemporaryUserModel } from '../../models/temporaryUser';
+import { TemporaryUserModel } from '../../models/users/temporaryUser';
 import { getOtp } from '../../../security/otp/otp';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { createJwt } from '../../../security/jwt/createJwt';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
 import { hashPassword } from '../../../security/passwords/password';
 
@@ -82,7 +82,7 @@ const forgotPassword: sync_middleware_type = async_error_handler(
     console.log(jwt, email);
     sendMailViaThread({
       text: `Your OTP for the NITH complaint system password change ${otp.generatedOtp}`,
-      subject: 'HORIZON Complaint System',
+      subject: 'Construction Cell Complaint System',
       from_info: process.env.EMAIL!,
       toSendMail: email,
       html: `<h1>Your OTP for the NITH complaint system password change ${otp.generatedOtp}</h1>`,

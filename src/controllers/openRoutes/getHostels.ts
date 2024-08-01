@@ -4,7 +4,7 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { HostelModel } from '../../models/hostelModel';
+import { HostelModel } from '../../models/hostel/hostelModel';
 import { Request, Response, NextFunction } from 'express';
 
 const getAllHostels: sync_middleware_type = async_error_handler(

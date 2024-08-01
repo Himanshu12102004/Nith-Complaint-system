@@ -8,8 +8,8 @@ import {
   Designations,
   requestWithComplaintAndEngineer,
 } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
-import { ComplaintModel } from '../../models/complaintModel';
+import { UserModel } from '../../models/users/userSchema';
+import { ComplaintModel } from '../../models/complaints/complaintModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { io } from '../../socket';
 const assignComplaints: sync_middleware_type = async_error_handler(

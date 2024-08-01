@@ -1,7 +1,7 @@
 import { Request } from 'express';
-import { UserDoc } from '../models/temporaryUser';
-import { permanentUserDoc } from '../models/userSchema';
-import { ComplaintDoc } from '../models/complaintModel';
+import { UserDoc } from '../models/users/temporaryUser';
+import { permanentUserDoc } from '../models/users/userSchema';
+import { ComplaintDoc } from '../models/complaints/complaintModel';
 export enum Designations {
   FACULTY = 'Faculty',
   WARDEN = 'Warden',

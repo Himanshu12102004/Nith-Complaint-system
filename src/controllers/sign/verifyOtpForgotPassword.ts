@@ -7,7 +7,7 @@ import {
 import { RequestedFor, requestWithTempUser } from '../../types/types';
 import { checkPasswords } from '../../../security/passwords/password';
 import { createJwt } from '../../../security/jwt/createJwt';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 const verifyOtpForgotPassword: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {
     if (!req.tempUser)

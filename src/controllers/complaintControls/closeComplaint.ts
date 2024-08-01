@@ -8,9 +8,9 @@ import {
   Designations,
   requestWithComplaintAndEngineer,
 } from '../../types/types';
-import { ComplaintModel } from '../../models/complaintModel';
+import { ComplaintModel } from '../../models/complaints/complaintModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 const closeComplaint: sync_middleware_type = async_error_handler(
   async (req: requestWithComplaintAndEngineer, res, next) => {
     const { complaint } = req.body;

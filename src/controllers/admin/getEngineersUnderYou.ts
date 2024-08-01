@@ -9,7 +9,7 @@ import {
   requestWithPermanentUser,
   requestWithQueryAndPermanentUser,
 } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
 
 const getEngineersUnderYou: sync_middleware_type = async_error_handler(

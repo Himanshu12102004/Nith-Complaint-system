@@ -5,13 +5,13 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { jwtVerification } from '../../../security/jwt/decodeJwt';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import {
   checkPasswords,
   hashPassword,
 } from '../../../security/passwords/password';
-import { SessionModel } from '../../models/sessionModel';
-import { TemporaryUserModel } from '../../models/temporaryUser';
+import { SessionModel } from '../../models/users/sessionModel';
+import { TemporaryUserModel } from '../../models/users/temporaryUser';
 import { RequestedFor, requestWithDeviceFingerprint } from '../../types/types';
 
 const forgotPasswordReset: sync_middleware_type = async_error_handler(

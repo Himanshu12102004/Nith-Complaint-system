@@ -9,8 +9,8 @@ import {
   checkPasswords,
   hashPassword,
 } from '../../../security/passwords/password';
-import { UserModel } from '../../models/userSchema';
-import { SessionModel } from '../../models/sessionModel';
+import { UserModel } from '../../models/users/userSchema';
+import { SessionModel } from '../../models/users/sessionModel';
 import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 
 const changePassword: sync_middleware_type = async_error_handler(

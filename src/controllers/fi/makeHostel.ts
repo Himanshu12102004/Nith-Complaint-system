@@ -5,7 +5,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
-import { HostelModel } from '../../models/hostelModel';
+import { HostelModel } from '../../models/hostel/hostelModel';
 
 const makeHostel: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {

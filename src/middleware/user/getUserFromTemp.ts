@@ -4,7 +4,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { jwtVerification } from '../../../security/jwt/decodeJwt';
-import { TemporaryUserModel, UserDoc } from '../../models/temporaryUser';
+import { TemporaryUserModel, UserDoc } from '../../models/users/temporaryUser';
 import { requestWithTempUser } from '../../types/types';
 const getUserFromTemp: sync_middleware_type = async_error_handler(
   async (req: requestWithTempUser, res, next) => {

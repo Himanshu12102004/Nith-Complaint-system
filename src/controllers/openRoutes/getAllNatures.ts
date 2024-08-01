@@ -3,7 +3,7 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { NatureModel } from '../../models/natureOfComplaintModel';
+import { NatureModel } from '../../models/complaints/natureOfComplaintModel';
 
 const getAllNatures: sync_middleware_type = async_error_handler(
   async (req, res, next) => {

@@ -4,7 +4,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { requestWithPermanentUser } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { jwtVerification } from '../../../security/jwt/decodeJwt';
 const getUserFromPermanent: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {

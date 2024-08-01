@@ -4,7 +4,7 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { requestWithPermanentUser } from '../../types/types';
-import { UserModel } from '../../models/userSchema';
+import { UserModel } from '../../models/users/userSchema';
 import { hashPassword } from '../../../security/passwords/password';
 import { encrypt } from '../../../security/secrets/encrypt';
 

@@ -5,8 +5,8 @@ import {
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
 import { requestWithPermanentUser } from '../../types/types';
-import { SessionModel } from '../../models/sessionModel';
-import { UserModel } from '../../models/userSchema';
+import { SessionModel } from '../../models/users/sessionModel';
+import { UserModel } from '../../models/users/userSchema';
 import { jwtVerification } from '../../../security/jwt/decodeJwt';
 
 const logOutFromAllDevices: sync_middleware_type = async_error_handler(

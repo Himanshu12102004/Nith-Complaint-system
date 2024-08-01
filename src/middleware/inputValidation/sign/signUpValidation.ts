@@ -7,9 +7,9 @@ import {
   requestWithDeviceFingerprint,
   Designations,
 } from '../../../types/types';
-import { TemporaryUserModel } from '../../../models/temporaryUser';
-import { UserModel } from '../../../models/userSchema';
-import { HostelModel } from '../../../models/hostelModel';
+import { TemporaryUserModel } from '../../../models/users/temporaryUser';
+import { UserModel } from '../../../models/users/userSchema';
+import { HostelModel } from '../../../models/hostel/hostelModel';
 import { encrypt } from '../../../../security/secrets/encrypt';
 const signUpValidation: sync_middleware_type = async_error_handler(
   async (req: requestWithDeviceFingerprint, res, next) => {

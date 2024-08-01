@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { hashPassword } from '../../security/passwords/password';
+import { hashPassword } from '../../../security/passwords/password';
 
 interface SessionAttributes {
   refreshToken: string;

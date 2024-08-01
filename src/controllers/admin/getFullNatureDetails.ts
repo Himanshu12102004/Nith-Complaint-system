@@ -5,7 +5,7 @@ import {
 } from '@himanshu_guptaorg/utils';
 import { Designations, requestWithPermanentUser } from '../../types/types';
 import { isThrowStatement } from 'typescript';
-import { NatureModel } from '../../models/natureOfComplaintModel';
+import { NatureModel } from '../../models/complaints/natureOfComplaintModel';
 
 const getFullNatureDetails = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {

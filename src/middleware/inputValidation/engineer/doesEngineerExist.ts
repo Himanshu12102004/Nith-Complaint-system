@@ -3,7 +3,7 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { UserModel } from '../../../models/userSchema';
+import { UserModel } from '../../../models/users/userSchema';
 import { isEngineer } from '../../../utils/hierarchy/isEngineer';
 import { requestWithComplaintAndEngineer } from '../../../types/types';
 

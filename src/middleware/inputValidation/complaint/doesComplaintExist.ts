@@ -3,7 +3,7 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { ComplaintModel } from '../../../models/complaintModel';
+import { ComplaintModel } from '../../../models/complaints/complaintModel';
 import { requestWithComplaintAndEngineer } from '../../../types/types';
 const doesComplaintExist: sync_middleware_type = async_error_handler(
   async (req: requestWithComplaintAndEngineer, res, next) => {
