@@ -13,7 +13,10 @@ const attachQueryOfEnggUnderYou: sync_middleware_type = async_error_handler(
   async (req: requestWithQueryAndPermanentUser, res, next) => {
     const designation = req.permanentUser?.designation;
     let dbQuery;
-    if (designation == Designations.CHIEF_EXECUTIVE_ENGINEER) {
+    if (
+      designation == Designations.EXECUTIVE_ENGINEER_CIVIL ||
+      designation == Designations.EXECUTIVE_ENGINEER_ELECTRICAL
+    ) {
       dbQuery = {
         $or: [
           { designation: encrypt(Designations.ASSISTANT_ENGINEER) },
@@ -21,6 +24,7 @@ const attachQueryOfEnggUnderYou: sync_middleware_type = async_error_handler(
           { designation: encrypt(Designations.SUPERVISOR) },
         ],
         isVerifiedByCEE: true,
+        isDeleted: false,
       };
     } else if (designation == Designations.ASSISTANT_ENGINEER) {
       dbQuery = {
@@ -29,11 +33,13 @@ const attachQueryOfEnggUnderYou: sync_middleware_type = async_error_handler(
           { designation: encrypt(Designations.SUPERVISOR) },
         ],
         isVerifiedByCEE: true,
+        isDeleted: false,
       };
     } else if (designation == Designations.JUNIOR_ENGINEER) {
       dbQuery = {
         isVerifiedByCEE: true,
         designation: encrypt(Designations.SUPERVISOR),
+        isDeleted: false,
       };
     } else {
       throw new Custom_error({

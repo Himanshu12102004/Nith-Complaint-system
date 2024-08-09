@@ -11,7 +11,11 @@ import { encrypt } from '../../../security/secrets/encrypt';
 const deleteHostel: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const { hostel } = req.body;
-    if (req.permanentUser?.designation != Designations.FI_CONSTRUCTION_CELL)
+    if (
+      req.permanentUser?.designation !=
+        Designations.ASSOCIATE_DEAN_ELECTRICAl &&
+      req.permanentUser?.designation != Designations.ASSOCIATE_DEAN_CIVIL
+    )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,

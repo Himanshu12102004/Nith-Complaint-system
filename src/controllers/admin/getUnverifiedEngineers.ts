@@ -9,7 +9,11 @@ import { UserModel } from '../../models/users/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
 const getUnverifiedEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
-    if (req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER)
+    if (
+      req.permanentUser?.designation != Designations.EXECUTIVE_ENGINEER_CIVIL &&
+      req.permanentUser?.designation !=
+        Designations.EXECUTIVE_ENGINEER_ELECTRICAL
+    )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,

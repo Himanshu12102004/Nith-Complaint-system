@@ -35,5 +35,5 @@ const decrypt = (encryptedString: string): string => {
   }
   return 'undefined';
 };
-
+console.log(decrypt('799936 121429 173109 741490 390874 361696 759804'));
 export { decrypt };

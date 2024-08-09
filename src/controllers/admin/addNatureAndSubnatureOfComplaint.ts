@@ -4,14 +4,24 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { Designations, requestWithPermanentUser } from '../../types/types';
+import {
+  BelongsTo,
+  Designations,
+  requestWithPermanentUser,
+} from '../../types/types';
 import { NatureModel } from '../../models/complaints/natureOfComplaintModel';
 
 const addNatureAndSubnatureOfComplaint: sync_middleware_type =
   async_error_handler(async (req: requestWithPermanentUser, res, next) => {
-    if (
-      req.permanentUser!.designation != Designations.CHIEF_EXECUTIVE_ENGINEER
-    ) {
+    let belongsTo: string;
+    if (req.permanentUser!.designation == Designations.EXECUTIVE_ENGINEER_CIVIL)
+      belongsTo = BelongsTo.CIVIL;
+    else if (
+      req.permanentUser!.designation ==
+      Designations.EXECUTIVE_ENGINEER_ELECTRICAL
+    )
+      belongsTo = BelongsTo.ELECTRICAL;
+    else {
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
@@ -33,7 +43,7 @@ const addNatureAndSubnatureOfComplaint: sync_middleware_type =
     });
     let updatedNature: any;
     if (!previousNature) {
-      const natureDoc = NatureModel.build({ nature, subNature });
+      const natureDoc = NatureModel.build({ nature, subNature, belongsTo });
       updatedNature = await natureDoc.save();
     } else if (!previousNature.nature.isActive) {
       const formattedSubNatures: { name: string; isActive: boolean }[] = [];

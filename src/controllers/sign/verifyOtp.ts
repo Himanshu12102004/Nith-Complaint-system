@@ -47,16 +47,33 @@ const verifyOtp: sync_middleware_type = async_error_handler(
         errors: [{ message: 'sorryWrongRoute' }],
         statusCode: 401,
       });
-    const user = UserModel.build({
-      name,
-      phone,
-      email,
-      designation: designation as Designations,
-      hostel,
-      department,
-      password,
-    });
-    await user.save();
+    const permanentUserEmail = await UserModel.find_one({ email });
+    const permanentUserPhone = await UserModel.find_one({ phone });
+    let user: any;
+    if (permanentUserEmail && permanentUserEmail.isDeleted) {
+      user = permanentUserEmail;
+      await UserModel.updateOne(permanentUserEmail._id, {
+        isDeleted: false,
+        isVerifiedByCEE: false,
+      });
+    } else if (permanentUserPhone && permanentUserPhone.isDeleted) {
+      user = permanentUserPhone;
+      await UserModel.updateOne(permanentUserPhone._id, {
+        isDeleted: false,
+        isVerifiedByCEE: false,
+      });
+    } else {
+      user = UserModel.build({
+        name,
+        phone,
+        email,
+        designation: designation as Designations,
+        hostel,
+        department,
+        password,
+      });
+      await user.save();
+    }
     await TemporaryUserModel.findByIdAndDelete(req.tempUser._id);
     const accessToken = await createJwt(
       { _id: user._id },
@@ -87,13 +104,22 @@ const verifyOtp: sync_middleware_type = async_error_handler(
     );
     if (
       designation == Designations.ASSISTANT_ENGINEER ||
-      designation == Designations.JUNIOR_ENGINEER
+      designation == Designations.JUNIOR_ENGINEER ||
+      designation == Designations.SUPERVISOR
     ) {
-      const ceeId: any = await UserModel.findOne({
-        designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
+      const ceeIdCivil: any = await UserModel.findOne({
+        designation: encrypt(Designations.EXECUTIVE_ENGINEER_CIVIL),
       });
-      if (global.connectedUsers.get(ceeId!._id.toString()))
-        io.to(global.connectedUsers.get(ceeId!._id.toString())!).emit(
+      if (global.connectedUsers.get(ceeIdCivil!._id.toString()))
+        io.to(global.connectedUsers.get(ceeIdCivil!._id.toString())!).emit(
+          'newEngineer',
+          'getUnverifiedEngineers'
+        );
+      const ceeIdElectrical: any = await UserModel.findOne({
+        designation: encrypt(Designations.EXECUTIVE_ENGINEER_ELECTRICAL),
+      });
+      if (global.connectedUsers.get(ceeIdElectrical!._id.toString()))
+        io.to(global.connectedUsers.get(ceeIdElectrical!._id.toString())!).emit(
           'newEngineer',
           'getUnverifiedEngineers'
         );

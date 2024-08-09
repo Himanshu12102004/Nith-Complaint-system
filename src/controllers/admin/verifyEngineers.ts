@@ -17,7 +17,9 @@ const verifyEngineers: sync_middleware_type = async_error_handler(
     const engineerToBeVerified = req.body.engineer;
     const verify = req.body.verify;
     if (
-      req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER
+      req.permanentUser?.designation !=
+        Designations.EXECUTIVE_ENGINEER_ELECTRICAL &&
+      req.permanentUser?.designation != Designations.EXECUTIVE_ENGINEER_CIVIL
     ) {
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],

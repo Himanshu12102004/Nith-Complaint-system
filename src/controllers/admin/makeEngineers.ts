@@ -7,7 +7,6 @@ import { requestWithPermanentUser } from '../../types/types';
 import { UserModel } from '../../models/users/userSchema';
 import { hashPassword } from '../../../security/passwords/password';
 import { encrypt } from '../../../security/secrets/encrypt';
-
 const makeEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     let { name, phone, email, designation, hostel, department, password } =

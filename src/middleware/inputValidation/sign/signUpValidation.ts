@@ -48,9 +48,11 @@ const signUpValidation: sync_middleware_type = async_error_handler(
         designation == Designations.JUNIOR_ENGINEER ||
         designation == Designations.ASSISTANT_ENGINEER ||
         designation == Designations.FACULTY ||
-        designation == Designations.CHIEF_EXECUTIVE_ENGINEER ||
+        designation == Designations.ASSOCIATE_DEAN_CIVIL ||
+        designation == Designations.ASSOCIATE_DEAN_ELECTRICAl ||
         designation == Designations.SUPERVISOR ||
-        designation == Designations.FI_CONSTRUCTION_CELL
+        designation == Designations.EXECUTIVE_ENGINEER_CIVIL ||
+        designation == Designations.EXECUTIVE_ENGINEER_ELECTRICAL
       )
     ) {
       throw new Custom_error({
@@ -118,17 +120,20 @@ const signUpValidation: sync_middleware_type = async_error_handler(
     }
     const permanentUserEmail = await UserModel.find_one({ email });
     const permanentUserPhone = await UserModel.find_one({ phone });
-    if (permanentUserEmail)
-      throw new Custom_error({
-        errors: [{ message: 'emailAlreadyRegistered' }],
-        statusCode: 400,
-      });
-    if (permanentUserPhone)
-      throw new Custom_error({
-        errors: [{ message: 'phoneAlreadyRegistered' }],
-        statusCode: 400,
-      });
 
+    if (permanentUserEmail) {
+      if (!permanentUserEmail.isDeleted)
+        throw new Custom_error({
+          errors: [{ message: 'emailAlreadyRegistered' }],
+          statusCode: 400,
+        });
+    }
+    if (permanentUserPhone)
+      if (!permanentUserPhone.isDeleted)
+        throw new Custom_error({
+          errors: [{ message: 'emailAlreadyRegistered' }],
+          statusCode: 400,
+        });
     next();
   }
 );

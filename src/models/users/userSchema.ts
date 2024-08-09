@@ -26,6 +26,7 @@ interface UserDoc extends mongoose.Document {
   assignedComplaints: Schema.Types.ObjectId[];
   isVerifiedByCEE: Boolean;
   sessions: string[];
+  isDeleted: boolean;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -53,6 +54,7 @@ const userSchema = new mongoose.Schema<UserDoc>(
     assignedComplaints: [{ type: Schema.Types.ObjectId, ref: 'Complaint' }],
     isVerifiedByCEE: { type: Boolean, default: false },
     sessions: [{ type: String }],
+    isDeleted: { type: Boolean, default: false },
   },
   {
     toJSON: {

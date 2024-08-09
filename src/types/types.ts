@@ -5,13 +5,14 @@ import { ComplaintDoc } from '../models/complaints/complaintModel';
 export enum Designations {
   FACULTY = 'Faculty',
   WARDEN = 'Warden',
-  CHIEF_EXECUTIVE_ENGINEER = 'Chief Executive Engineer',
+  EXECUTIVE_ENGINEER_CIVIL = 'Executive Engineer (Civil)',
+  EXECUTIVE_ENGINEER_ELECTRICAL = 'Executive Engineer (Electrical)',
   ASSISTANT_ENGINEER = 'Assistant Engineer',
   JUNIOR_ENGINEER = 'Junior Engineer',
   SUPERVISOR = 'Supervisor',
-  FI_CONSTRUCTION_CELL = 'FI construction cell',
+  ASSOCIATE_DEAN_CIVIL = 'Associate Dean (Civil)',
+  ASSOCIATE_DEAN_ELECTRICAl = 'Associate Dean (Electrical)',
 }
-
 export enum RequestedFor {
   EMAIL_VERIFICATION = 'Email Verification',
   PASSWORD_CHANGE = 'Password Change',
@@ -49,35 +50,7 @@ export interface requestWithComplaintAndEngineer
   complaint?: ComplaintDoc;
   engineer?: permanentUserDoc;
 }
-export enum NatureOfComplaint {
-  MASONRY = 'Masonry',
-  ELECTRICAL = 'Electrical',
-  PLUMBING = 'Plumbing',
-  CARPENTRY = 'Carpentry',
-}
-
-export enum SubNatureOfElectricalComplaint {
-  BROKEN_BULB = 'Broken Bulb',
-  FAULTY_FAN = 'Faulty Fan',
-  MALFUNCTIONING_SWITCH = 'Malfunctioning Switch',
-  DAMAGED_SOCKET = 'Damaged Socket',
-  FAULTY_GYESER = 'Faulty Geyser',
-}
-
-export enum SubNatureOfPlumbingComplaint {
-  WATER_LEAKAGE = 'Water Leakage',
-  NO_WATER_SUPPLY = 'No Water Supply',
-  CLOGGED_DRAINAGE = 'Clogged Drainage',
-}
-
-export enum SubNatureOfMasonryComplaint {
-  DAMPNESS_ISSUE = 'Dampness Issue',
-  LOOSE_PLASTER = 'Loose Plaster',
-  NEED_WHITEWASHING = 'Need Whitewashing',
-  BROKEN_FLOOR_TILE = 'Broken Floor Tile',
-}
-
-export enum SubNatureOfCarpentryComplaint {
-  BROKEN_DOOR = 'Broken Door',
-  DAMAGED_WINDOW = 'Damaged Window',
+export enum BelongsTo {
+  CIVIL = 'civil',
+  ELECTRICAL = 'electrical',
 }

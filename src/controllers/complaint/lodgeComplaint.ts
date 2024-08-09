@@ -4,7 +4,11 @@ import {
   async_error_handler,
   sync_middleware_type,
 } from '@himanshu_guptaorg/utils';
-import { Designations, requestWithPermanentUser } from '../../types/types';
+import {
+  BelongsTo,
+  Designations,
+  requestWithPermanentUser,
+} from '../../types/types';
 import { ComplaintModel } from '../../models/complaints/complaintModel';
 import { UserModel } from '../../models/users/userSchema';
 import { encrypt } from '../../../security/secrets/encrypt';
@@ -12,6 +16,7 @@ import { sendMailViaThread } from '../../utils/mail/sendMailViaThread';
 import { io } from '../../socket';
 import { isEngineer } from '../../utils/hierarchy/isEngineer';
 import mongoose from 'mongoose';
+import { NatureModel } from '../../models/complaints/natureOfComplaintModel';
 const lodgeComplaint: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     if (isEngineer(req.permanentUser!.designation))
@@ -26,9 +31,25 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
         errors: [{ message: 'giveAllTheFields' }],
         statusCode: 403,
       });
-    const chiefExecutiveEngineerID: any = (await UserModel.findOne({
-      designation: encrypt(Designations.CHIEF_EXECUTIVE_ENGINEER),
-    }))!._id;
+    const complaintRegarding = await NatureModel.findOne({
+      'nature.name': natureOfComplaint,
+    });
+    if (!complaintRegarding)
+      throw new Custom_error({
+        errors: [{ message: 'noSuchComplaintNature' }],
+        statusCode: 400,
+      });
+    const belongsTo = complaintRegarding!.belongsTo;
+    let executiveEngineerID: any;
+    if (belongsTo == BelongsTo.CIVIL) {
+      executiveEngineerID = (await UserModel.findOne({
+        designation: encrypt(Designations.EXECUTIVE_ENGINEER_CIVIL),
+      }))!._id;
+    } else if (belongsTo == BelongsTo.ELECTRICAL) {
+      executiveEngineerID = (await UserModel.findOne({
+        designation: encrypt(Designations.EXECUTIVE_ENGINEER_ELECTRICAL),
+      }))!._id;
+    }
     const docsCount = await ComplaintModel.countDocuments();
     const complaint = ComplaintModel.build({
       lodgedBy: req.permanentUser?._id as mongoose.Types.ObjectId,
@@ -36,17 +57,17 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
       natureOfComplaint,
       subNatureOfComplaint,
       description,
-      currentlyAssignedTo: chiefExecutiveEngineerID,
+      currentlyAssignedTo: executiveEngineerID,
       tentativeDateOfCompletion: new Date(0),
-      complaintId: `${docsCount}`,
+      complaintId: `${docsCount + 1}`,
       historyOfComplaint: [
         {
-          assignedTo: chiefExecutiveEngineerID,
+          assignedTo: executiveEngineerID,
           assignedOn: new Date(Date.now()),
         },
       ],
     });
-    await UserModel.findByIdAndUpdate(chiefExecutiveEngineerID, {
+    await UserModel.findByIdAndUpdate(executiveEngineerID, {
       $push: { assignedComplaints: complaint._id },
     });
     await complaint.save();
@@ -62,14 +83,18 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
       cc: null,
       attachment: null,
     });
+    console.log(global.connectedUsers);
+    console.log(
+      '------------------------------------kjfkdjfkdfjkjkjj----------------------------------------'
+    );
+    console.log(executiveEngineerID.toString());
     if (
-      global.connectedUsers.get(
-        JSON.stringify(chiefExecutiveEngineerID).toString()
-      ) != undefined
+      global.connectedUsers.get(executiveEngineerID.toString()) != undefined
     ) {
-      io.to(
-        global.connectedUsers.get(chiefExecutiveEngineerID.toString())!
-      ).emit('newComplaint', 'getAssignedComplaints');
+      io.to(global.connectedUsers.get(executiveEngineerID.toString())!).emit(
+        'newComplaint',
+        'getAssignedComplaints'
+      );
     }
     const response = new Custom_response(
       true,

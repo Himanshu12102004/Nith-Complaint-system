@@ -12,7 +12,10 @@ import { ComplaintModel } from '../../models/complaints/complaintModel';
 
 const getAllComplaints: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUserAndParsedFilters, res, next) => {
-    if (req.permanentUser?.designation != Designations.FI_CONSTRUCTION_CELL)
+    if (
+      req.permanentUser?.designation != Designations.ASSOCIATE_DEAN_CIVIL &&
+      req.permanentUser?.designation != Designations.ASSOCIATE_DEAN_ELECTRICAl
+    )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,

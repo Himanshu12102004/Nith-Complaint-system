@@ -11,7 +11,10 @@ import { encrypt } from '../../../security/secrets/encrypt';
 const getAllEngineers: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const permanentUser = req.permanentUser;
-    if (permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER)
+    if (
+      permanentUser?.designation != Designations.EXECUTIVE_ENGINEER_CIVIL &&
+      permanentUser?.designation != Designations.EXECUTIVE_ENGINEER_ELECTRICAL
+    )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,

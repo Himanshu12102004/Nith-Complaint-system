@@ -10,7 +10,11 @@ import { HostelModel } from '../../models/hostel/hostelModel';
 const makeHostel: sync_middleware_type = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
     const { hostel } = req.body;
-    if (req.permanentUser?.designation != Designations.FI_CONSTRUCTION_CELL)
+    let user = req.permanentUser;
+    if (
+      user?.designation != Designations.ASSOCIATE_DEAN_CIVIL &&
+      user?.designation != Designations.ASSOCIATE_DEAN_ELECTRICAl
+    )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,

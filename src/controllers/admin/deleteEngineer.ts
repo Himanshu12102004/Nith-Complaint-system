@@ -14,7 +14,11 @@ import { UserModel } from '../../models/users/userSchema';
 const deleteEngineer: sync_middleware_type = async_error_handler(
   async (req: requestWithEngineer, res, next) => {
     const { engineer } = req.body;
-    if (req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER)
+    if (
+      req.permanentUser?.designation != Designations.EXECUTIVE_ENGINEER_CIVIL &&
+      req.permanentUser?.designation !=
+        Designations.EXECUTIVE_ENGINEER_ELECTRICAL
+    )
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
@@ -28,7 +32,7 @@ const deleteEngineer: sync_middleware_type = async_error_handler(
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    await UserModel.findByIdAndDelete(engineer);
+    await UserModel.findByIdAndUpdate(req.engineer?.id, { isDeleted: true });
     const response = new Custom_response(
       true,
       null,

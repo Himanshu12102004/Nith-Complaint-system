@@ -3,18 +3,30 @@ import {
   Custom_response,
   async_error_handler,
 } from '@himanshu_guptaorg/utils';
-import { Designations, requestWithPermanentUser } from '../../types/types';
+import {
+  BelongsTo,
+  Designations,
+  requestWithPermanentUser,
+} from '../../types/types';
 import { isThrowStatement } from 'typescript';
 import { NatureModel } from '../../models/complaints/natureOfComplaintModel';
 
 const getFullNatureDetails = async_error_handler(
   async (req: requestWithPermanentUser, res, next) => {
-    if (req.permanentUser?.designation != Designations.CHIEF_EXECUTIVE_ENGINEER)
+    let belongsTo: string;
+    if (req.permanentUser?.designation == Designations.EXECUTIVE_ENGINEER_CIVIL)
+      belongsTo = BelongsTo.CIVIL;
+    else if (
+      req.permanentUser?.designation ==
+      Designations.EXECUTIVE_ENGINEER_ELECTRICAL
+    )
+      belongsTo = BelongsTo.ELECTRICAL;
+    else
       throw new Custom_error({
         errors: [{ message: 'notAuthorized' }],
         statusCode: 401,
       });
-    const natures = await NatureModel.find();
+    const natures = await NatureModel.find({ belongsTo: belongsTo });
     const formattedNatures = natures.map((elem) => {
       return {
         name: elem.nature.name,

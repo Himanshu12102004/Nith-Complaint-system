@@ -4,21 +4,23 @@ function isBelowInHierarchy(above: string, below: string) {
   if (
     below == Designations.WARDEN ||
     below == Designations.FACULTY ||
-    below == Designations.FI_CONSTRUCTION_CELL ||
+    below == Designations.ASSOCIATE_DEAN_ELECTRICAl ||
     above == Designations.WARDEN ||
     above == Designations.FACULTY ||
-    above == Designations.FI_CONSTRUCTION_CELL
+    above == Designations.ASSOCIATE_DEAN_CIVIL
   )
     return false;
   if (above == below) return false;
   if (
     above == Designations.ASSISTANT_ENGINEER &&
-    below == Designations.CHIEF_EXECUTIVE_ENGINEER
+    (below == Designations.EXECUTIVE_ENGINEER_CIVIL ||
+      below == Designations.EXECUTIVE_ENGINEER_ELECTRICAL)
   )
     return false;
   if (
     above == Designations.JUNIOR_ENGINEER &&
-    (below == Designations.CHIEF_EXECUTIVE_ENGINEER ||
+    (below == Designations.EXECUTIVE_ENGINEER_CIVIL ||
+      below == Designations.EXECUTIVE_ENGINEER_ELECTRICAL ||
       below == Designations.ASSISTANT_ENGINEER)
   )
     return false;
