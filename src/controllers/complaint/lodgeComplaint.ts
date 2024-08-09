@@ -83,11 +83,24 @@ const lodgeComplaint: sync_middleware_type = async_error_handler(
       cc: null,
       attachment: null,
     });
-    console.log(global.connectedUsers);
-    console.log(
-      '------------------------------------kjfkdjfkdfjkjkjj----------------------------------------'
-    );
-    console.log(executiveEngineerID.toString());
+    let fiCivilID = (await UserModel.findOne({
+      designation: encrypt(Designations.ASSOCIATE_DEAN_CIVIL),
+    }))!._id;
+    let fiElectricalID = (await UserModel.findOne({
+      designation: encrypt(Designations.ASSOCIATE_DEAN_CIVIL),
+    }))!._id;
+    if (global.connectedUsers.get(fiCivilID.toString()) != undefined) {
+      io.to(global.connectedUsers.get(fiCivilID.toString())!).emit(
+        'newComplaint',
+        'getAllComplaints'
+      );
+    }
+    if (global.connectedUsers.get(fiElectricalID.toString()) != undefined) {
+      io.to(global.connectedUsers.get(fiElectricalID.toString())!).emit(
+        'newComplaint',
+        'getAllComplaints'
+      );
+    }
     if (
       global.connectedUsers.get(executiveEngineerID.toString()) != undefined
     ) {
