@@ -35,7 +35,7 @@ Ensure you have the following installed on your system:
 1. Clone the repository:
    ```bash
    git clone 
-   cd 
+   cd Nith-Complaint-system
    ```
 2. Run Npm start
   ```bash
